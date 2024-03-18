@@ -1,19 +1,20 @@
 const express=require("express");
 const app=express();
-const mongoose=require("mongoose")
+const mongoose=require("mongoose");
 require("dotenv").config();
-const mongoConfig=require("./database/db")
+const mongoConfig=require("./database/db");
 const port=process.env.PORT||5000;
+const questionRouter=require("./router/questionrouter");
+const blogRouter=require("./controller/blogcontroller");
+app.use(express.json());
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('error');
 });
 
-app.get("/",(req,res)=>{
-    res.send("hello world");
-})
-
+app.use("/",questionRouter);
+app.use("/",blogRouter);
 
 mongoose.connect(mongoConfig.mongouri)
 .then(()=>console.log("connected to database"))
