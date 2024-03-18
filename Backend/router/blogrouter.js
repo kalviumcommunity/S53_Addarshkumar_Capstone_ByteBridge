@@ -3,6 +3,6 @@ const blogRouter=express.Router();
 
 const {getBlog}=require("../controller/blogcontroller");
 
-blogRouter.get("/blog",getQuestion);
+blogRouter.get("/blog",getBlog);
 
 module.exports=blogRouter;
