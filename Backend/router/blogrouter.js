@@ -1,8 +1,8 @@
 const express=require('express');
 const blogRouter=express.Router();
 
-const {getBlog}=require("../controller/blogcontroller");
+const getBlogs=require("../controller/blogcontroller");
 
-blogRouter.get("/blog",getBlog);
+blogRouter.get("/blog",getBlogs);
 
 module.exports=blogRouter;

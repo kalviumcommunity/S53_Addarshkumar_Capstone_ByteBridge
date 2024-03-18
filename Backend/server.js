@@ -5,7 +5,7 @@ require("dotenv").config();
 const mongoConfig=require("./database/db");
 const port=process.env.PORT||5000;
 const questionRouter=require("./router/questionrouter");
-const blogRouter=require("./controller/blogcontroller");
+const blogRouter=require("./router/blogrouter");
 app.use(express.json());
 
 app.use((err, req, res, next) => {
@@ -14,7 +14,7 @@ app.use((err, req, res, next) => {
 });
 
 app.use("/",questionRouter);
-app.use("/",blogRouter);
+app.use("/",blogRouter)
 
 mongoose.connect(mongoConfig.mongouri)
 .then(()=>console.log("connected to database"))
