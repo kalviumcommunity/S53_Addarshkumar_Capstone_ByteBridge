@@ -5,9 +5,20 @@ const getBlogs=async(req,res)=>{
         res.status(200).json(blog);
      }
      catch(err){
-        console.log("error fetching blog",err);
-        res.status(500).send("error fetching blog")
+        console.log("error during fetching blog",err);
+        res.status(500).send("error during fetching blog")
      }
 }
 
-module.exports=getBlogs
+const postBlogs=async(req,res)=>{
+   try{
+      const blog=await blogModel.create(req.body);
+      res.status(201).json(blog);
+   }
+   catch(err){
+      console.log("error during posting blog",err);
+      res.status(500).send("error during posting blog")
+   }
+}
+
+module.exports={getBlogs,postBlogs};
