@@ -6,6 +6,7 @@ const mongoConfig=require("./database/db");
 const port=process.env.PORT||5000;
 const questionRouter=require("./router/questionrouter");
 const blogRouter=require("./router/blogrouter");
+const userRouter=require("./router/userrouter");
 app.use(express.json());
 
 app.use((err, req, res, next) => {
@@ -14,7 +15,8 @@ app.use((err, req, res, next) => {
 });
 
 app.use("/",questionRouter);
-app.use("/",blogRouter)
+app.use("/",blogRouter);
+app.use("/",userRouter);
 
 mongoose.connect(mongoConfig.mongouri)
 .then(()=>console.log("connected to database"))
