@@ -8,5 +8,5 @@ const answerSchema=new mongoose.Schema({
 
 })
 
-const answerModel=mongoose.model("users",answerSchema);
+const answerModel=mongoose.model("answers",answerSchema);
 module.exports=answerModel
