@@ -1,14 +1,18 @@
 const userModel=require("../model/userschema");
+const bcrypt=require("bcrypt");
 
 const createUser=async(req,res)=>{
     try{
-        const {email}=req.body;
+        let {name,email,password}=req.body;
+        const salt =bcrypt.genSaltSync(10);
+         password=bcrypt.hashSync(password,salt);
+        console.log(password);
         const oldUser=await userModel.findOne({email});
         if(oldUser){
             res.send("This email already exists");
         }
         else{
-           const user=await userModel.create(req.body);
+           const user=await userModel.create({name,email,password});
            res.status(201).json(user);
        }
     }
@@ -24,7 +28,8 @@ const findUser=async (req, res) => {
         const user = await userModel.findOne({ email });
         
         if (user) {
-            if (user.password === password) {
+            const decryptedPassword= bcrypt.compareSync(password,user.password)
+            if (decryptedPassword) {
                 res.status(201).json({ user});
             } else {
                 res.json("The password is incorrect");
