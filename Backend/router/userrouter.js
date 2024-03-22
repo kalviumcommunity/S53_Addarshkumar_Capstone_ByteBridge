@@ -1,5 +1,5 @@
 const express=require("express");
-const uservalidation=require("../middleware/middleware");
+const {uservalidation}=require("../middleware/middleware");
 const userRouter=express.Router();
 const {createUser,findUser}=require("../controller/usercontroller");
 

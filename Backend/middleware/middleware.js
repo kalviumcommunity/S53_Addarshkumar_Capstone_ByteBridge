@@ -1,19 +1,28 @@
-const userValidator=require("../validator/uservalidation");
-const blogValidator=require("../validator/blogvalidator");
+const userValidator = require("../validator/uservalidation");
+const blogValidator = require("../validator/blogvalidator");
 
-const uservalidation=(req,res,next)=>{
-    const {error}=userValidator.validate(req.body);
-    if(error){
-        return res.status(400).json({ error: error.details[0].message });
+const uservalidation = async (req, res, next) => {
+    try {
+        const { error } = await userValidator.validate(req.body);
+        if (error) {
+            return res.status(400).json({ error: error.details[0].message });
+        }
+        next();
+    } catch (error) {
+        return res.status(500).json({ error: 'Internal Server Error' });
     }
-    next();
 }
-const blogValidation=(req,res,next)=>{
-    const {error}=blogValidator.validate(req.body);
-    if(error){
-     return res.status(400).json({ error: error.details[0].message });
-    }
-    next();
- }
 
-module.exports=uservalidation,blogValidation;
+const blogValidation = async (req, res, next) => {
+    try {
+        const { error } = await blogValidator.validate(req.body);
+        if (error) {
+            return res.status(400).json({ error: error.details[0].message });
+        }
+        next();
+    } catch (error) {
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
+module.exports = { uservalidation, blogValidation };
