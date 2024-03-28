@@ -1,5 +1,5 @@
 import React from 'react'
-import { HStack,Image } from '@chakra-ui/react'
+import { HStack,Image,Box } from '@chakra-ui/react'
 
 const Homepage = () => {
   return (
