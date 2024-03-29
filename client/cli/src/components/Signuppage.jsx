@@ -24,13 +24,13 @@ const Signuppage = () => {
 
       <FormControl mt="30px" maxW={["xs", "sm", "sm", "sm"]}>
         <FormLabel>Your name</FormLabel>
-        <Input type="text" />
+        <Input type="text" aria-label="Your name" />
 
         <FormLabel>Email address</FormLabel>
-        <Input type="email" />
+        <Input type="email" aria-label="Password" />
 
         <FormLabel>Password</FormLabel>
-        <Input type="password" />
+        <Input type="password" aria-label="Email" />
       </FormControl>
 
       <Button mt="25px" w={["60%", "sm", "sm", "sm"]} colorScheme="blue">
@@ -50,7 +50,9 @@ const Signuppage = () => {
         h="40px"
         justifyContent="space-evenly"
       >
-        <Image src="/google.png" boxSize="28px" />
+        <Image
+        loading="lazy"
+        src="/google.png" boxSize="28px" />
         <Text>Continue with google</Text>
       </HStack>
 
@@ -61,7 +63,9 @@ const Signuppage = () => {
         h="40px"
         justifyContent="space-evenly"
       >
-        <Image src="/microsoft.png" boxSize="28px" />
+        <Image
+        loading="lazy"
+        src="/microsoft.png" boxSize="28px" />
         <Text>Continue with microsoft</Text>
       </HStack>
 
@@ -72,7 +76,9 @@ const Signuppage = () => {
         h="40px"
         justifyContent="space-evenly"
       >
-        <Image src="/linkedin.png" boxSize="28px" />
+        <Image 
+        loading="lazy"
+        src="/linkedin.png" boxSize="28px" />
         <Text>Continue with Linkedin</Text>
       </HStack>
     </VStack>

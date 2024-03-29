@@ -41,6 +41,7 @@ const Homepage = () => {
       </Link>
       </VStack>
     <Image
+          loading="lazy"
           src="/Home.svg"
           alt="image"
           boxSize={["70%","60%","40%","40%"]}

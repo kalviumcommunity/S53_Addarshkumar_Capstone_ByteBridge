@@ -32,7 +32,7 @@ const Navbar = () => {
         h="10vh"
       >
         <Image
-          borderRadius="full"
+          loading="lazy"
           boxSize="50px"
           src="/logo.svg"
           alt="logo"
