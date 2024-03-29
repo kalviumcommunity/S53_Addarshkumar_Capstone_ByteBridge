@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   HStack,
   Image,
@@ -33,14 +34,18 @@ const Navbar = () => {
         <Image
           borderRadius="full"
           boxSize="50px"
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjrdiWzNbAl_PBwut_OctY7yndfy81qNZ7RA&usqp=CAU"
-          alt="Dan Abramov"
+          src="/logo.svg"
+          alt="logo"
         />
+        <Link to="/">
         <Text>Home</Text>
+        </Link>
         <Text>Blog</Text>
         <Text>About us</Text>
         <Text>Contact us</Text>
+        <Link to="/login">
         <Button colorScheme="orange">Login</Button>
+        </Link>
       </HStack>
 
       <HStack
@@ -58,7 +63,9 @@ const Navbar = () => {
           alt="Dan Abramov"
         />
 
+         <Link to="/login">
         <Button colorScheme="orange">Login</Button>
+        </Link>
       </HStack>
       <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
         <DrawerOverlay />
@@ -67,7 +74,9 @@ const Navbar = () => {
 
           <DrawerBody mt="40px">
             <VStack h="60vh">
+              <Link to="/">
               <Text mt="20px" onClick={onClose}>Home</Text>
+              </Link>
               <Text mt="20px" onClick={onClose}>Blog</Text>
               <Text mt="20px" onClick={onClose}>contact us</Text>
               <Text mt="20px" onClick={onClose}>About us</Text>
