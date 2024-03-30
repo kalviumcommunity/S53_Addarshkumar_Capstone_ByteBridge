@@ -57,9 +57,8 @@ const Navbar = () => {
       >
         <Icon onClick={onOpen} boxSize={6} as={AiOutlineMenu} />
         <Image
-          borderRadius="full"
           boxSize="50px"
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjrdiWzNbAl_PBwut_OctY7yndfy81qNZ7RA&usqp=CAU"
+          src="/logo.svg"
           alt="Dan Abramov"
         />
 
