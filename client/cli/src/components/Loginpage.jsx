@@ -34,6 +34,9 @@ const Loginpage = () => {
       setValue(data)
       navigate("/")
     })
+    .catch((error)=>{
+      console.log(error)
+    })
   }
 
   const handlegithub = () => {
