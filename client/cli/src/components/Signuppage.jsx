@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+import {auth,provider} from "./firebaseauth/config";
+import { signInWithPopup,GithubAuthProvider  } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 import {
   Heading,
   VStack,
@@ -16,8 +19,33 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 const Signuppage = () => {
+  const [value,setValue]=useState("");
+
   const toast = useToast()
   const { register, handleSubmit, formState: { errors } } = useForm();
+
+  const navigate=useNavigate();
+
+  const handlesignup=()=>{
+    signInWithPopup(auth,provider).then((data)=>{
+      setValue(data)
+      navigate("/")
+    })
+    .catch((error)=>{
+      console.log(error)
+    })
+  }
+
+  const handlegithub = () => {
+    signInWithPopup(auth, new GithubAuthProvider())
+      .then((result) => {
+        console.log(result);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   const onSubmit = (data) => {
     toast({
@@ -63,6 +91,7 @@ const Signuppage = () => {
       <Text mt="20px">Or</Text>
 
       <HStack
+       onClick={handlesignup}
         border="1px solid gray"
         w={["80%", "50%", "30%", "25%"]}
         borderRadius="25px"
@@ -78,6 +107,7 @@ const Signuppage = () => {
       </HStack>
 
       <HStack
+        onClick={handlegithub}
         border="1px solid gray"
         w={["80%", "50%", "30%", "25%"]}
         borderRadius="25px"
@@ -86,10 +116,10 @@ const Signuppage = () => {
       >
         <Image
           loading="lazy"
-          src="/microsoft.png"
+          src="/github.png"
           boxSize="28px"
         />
-        <Text>Continue with microsoft</Text>
+        <Text>Continue with Github</Text>
       </HStack>
 
       <HStack
@@ -101,10 +131,10 @@ const Signuppage = () => {
       >
         <Image
           loading="lazy"
-          src="/linkedin.png"
+          src="/phone.png"
           boxSize="28px"
         />
-        <Text>Continue with Linkedin</Text>
+        <Text>Continue with phone</Text>
       </HStack>
     </VStack>
   );

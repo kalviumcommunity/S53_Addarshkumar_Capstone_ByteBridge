@@ -9,11 +9,15 @@ import {
   Input,
   Button,
   useToast,
-  FormErrorMessage
+  FormErrorMessage,
+  useStatStyles
 } from "@chakra-ui/react";
-import React from "react";
+import React,{useState} from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { signInWithPopup,GithubAuthProvider } from "firebase/auth";
+import {auth,provider} from "./firebaseauth/config";
+import { useNavigate } from "react-router-dom";
 
 const Loginpage = () => {
   const {
@@ -22,6 +26,30 @@ const Loginpage = () => {
     formState: { errors },
   } = useForm();
   const toast = useToast();
+  const navigate=useNavigate();
+  const [value,setValue]=useState("");
+
+  const handleLogin=()=>{
+    signInWithPopup(auth,provider).then((data)=>{
+      setValue(data)
+      navigate("/")
+    })
+    .catch((error)=>{
+      console.log(error)
+    })
+  }
+
+  const handlegithub = () => {
+    signInWithPopup(auth, new GithubAuthProvider())
+      .then((result) => {
+        console.log(result);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  
 
   const onSubmit = (data) => {
     toast({
@@ -41,6 +69,7 @@ const Loginpage = () => {
       </Heading>
 
       <HStack
+        onClick={handleLogin}
         border="1px solid gray"
         w={["80%", "50%", "30%", "25%"]}
         borderRadius="25px"
@@ -52,14 +81,15 @@ const Loginpage = () => {
       </HStack>
 
       <HStack
+       onClick={handlegithub}
         border="1px solid gray"
         w={["80%", "50%", "30%", "25%"]}
         borderRadius="25px"
         h="40px"
         justifyContent="space-evenly"
       >
-        <Image src="/microsoft.png" boxSize="28px" />
-        <Text>Continue with microsoft</Text>
+        <Image src="/github.png" boxSize="28px" />
+        <Text>Continue with Github </Text>
       </HStack>
 
       <HStack
@@ -69,8 +99,8 @@ const Loginpage = () => {
         h="40px"
         justifyContent="space-evenly"
       >
-        <Image src="/linkedin.png" boxSize="28px" />
-        <Text>Continue with Linkedin</Text>
+        <Image src="/phone.png" boxSize="28px" />
+        <Text>Continue with Phone</Text>
       </HStack>
 
       <Text>Or continue with email</Text>
