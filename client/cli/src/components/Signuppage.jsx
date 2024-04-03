@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import {auth,provider} from "./firebaseauth/config";
 import { signInWithPopup,GithubAuthProvider  } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
 import {
   Heading,
   VStack,
@@ -47,17 +49,23 @@ const Signuppage = () => {
       });
   };
 
-  const onSubmit = (data) => {
-    toast({
-      title: 'Account created.',
-      description: "You are signed up successfully",
-      status: 'success',
-      position:'top',
-      duration: 4000,
-      isClosable: true,
-      colorScheme:'blue'
-
-    })
+  const onSubmit = async(data) => {
+    try{
+      const res =await axios.post("https://s53-addarshkumar-capstone-bytebridge.onrender.com/signup",data);
+      document.cookie=`token=${res.data.token}`
+      toast({
+        description:`${res.data.message}`,
+        status: 'success',
+        position:'top',
+        duration: 4000,
+        isClosable: true,
+        colorScheme:'blue'
+  
+      })
+    }
+    catch(err){
+      console.log(err);
+    }
   };
 
   return (
@@ -70,6 +78,12 @@ const Signuppage = () => {
       </Text>
 
       <form onSubmit={handleSubmit(onSubmit)}>
+
+      <FormControl mt="30px" maxW={["xs", "sm", "sm", "sm"]} isInvalid={errors.name}>
+          <FormLabel>Your name</FormLabel>
+          <Input type="text" aria-label="Your name" {...register("name", { required: "Name is required" })} />
+          <FormErrorMessage>{errors.name && errors.name.message}</FormErrorMessage>
+        </FormControl>
 
         <FormControl mt="30px" maxW={["xs", "sm", "sm", "sm"]} isInvalid={errors.email}>
           <FormLabel>Email address</FormLabel>
