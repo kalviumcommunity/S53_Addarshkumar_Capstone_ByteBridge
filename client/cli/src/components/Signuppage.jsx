@@ -51,7 +51,7 @@ const Signuppage = () => {
 
   const onSubmit = async(data) => {
     try{
-      const res =await axios.post("http://localhost:4000/signup",data);
+      const res =await axios.post("https://s53-addarshkumar-capstone-bytebridge.onrender.com/signup",data);
       document.cookie=`token=${res.data.token}`
       toast({
         description:`${res.data.message}`,

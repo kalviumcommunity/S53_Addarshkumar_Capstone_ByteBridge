@@ -11,7 +11,17 @@ const createUser = async (req, res) => {
         }
 
         try {
-            const token =jwt.sign(email,process.env.SECRET_KEY);
+            const expiresIn = '1h';
+
+            let token;
+            try {
+                token = jwt.sign({ email }, process.env.SECRET_KEY, { expiresIn });
+            } catch (error) {
+                console.error('Error generating JWT token:', error);
+                res.status(500).json({"message": "Internal Server Error"});
+                return;
+            }
+
             const salt = await bcrypt.genSalt(10);
             password = await bcrypt.hash(password, salt);
             const oldUser = await userModel.findOne({ email });
@@ -42,7 +52,17 @@ const findUser = async (req, res) => {
         if (user) {
             const decryptedPassword = await bcrypt.compare(password, user.password)
             if (decryptedPassword) {
-                const token =jwt.sign(email,process.env.SECRET_KEY);
+                const expiresIn = '1h';
+
+                let token;
+                try {
+                    token = jwt.sign({ email }, process.env.SECRET_KEY, { expiresIn });
+                } catch (error) {
+                    console.error('Error generating JWT token:', error);
+                    res.status(500).json({"message": "Internal Server Error"});
+                    return;
+                }
+
                 res.status(201).json({"message":"successfully signed in","token":token});
             } else {
                 res.json({"message":"The password is incorrect"});
@@ -55,4 +75,6 @@ const findUser = async (req, res) => {
         res.status(500).json("Internal Server Error");
     }
 }
+
 module.exports = { createUser, findUser };
+
