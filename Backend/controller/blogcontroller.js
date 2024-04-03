@@ -1,4 +1,6 @@
 const blogModel=require("../model/blogschema");
+require("dotenv").config();
+
 const getBlogs=async(req,res)=>{
      try{
         const blog=await blogModel.find({});
