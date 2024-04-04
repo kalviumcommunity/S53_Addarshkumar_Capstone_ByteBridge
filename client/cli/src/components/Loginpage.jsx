@@ -108,7 +108,9 @@ const Loginpage = () => {
         justifyContent="space-evenly"
       >
         <Image src="/phone.png" boxSize="28px" />
+        <Link to={"/phonelogin"}>
         <Text>Continue with Phone</Text>
+        </Link>
       </HStack>
 
       <Text>Or continue with email</Text>
