@@ -121,7 +121,6 @@ const Signuppage = () => {
         />
         <Text>Continue with Github</Text>
       </HStack>
-
       <HStack
         border="1px solid gray"
         w={["80%", "50%", "30%", "25%"]}
@@ -134,7 +133,9 @@ const Signuppage = () => {
           src="/phone.png"
           boxSize="28px"
         />
+      <Link to={"/phonelogin"}>
         <Text>Continue with phone</Text>
+</Link>
       </HStack>
     </VStack>
   );
