@@ -18,6 +18,8 @@ import {
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios"
+import Cookies from 'js-cookie';
+
 
 const Signuppage = () => {
   const [value,setValue]=useState("");
@@ -51,7 +53,7 @@ const Signuppage = () => {
   const onSubmit = async(data) => {
     try{
       const res =await axios.post("https://s53-addarshkumar-capstone-bytebridge.onrender.com/signup",data);
-      document.cookie=`token=${res.data.token}`
+      Cookies.set("token",res.data.token,{ httpOnly: true, secure: true })
       toast({
         description:`${res.data.message}`,
         status: 'success',

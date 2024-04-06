@@ -7,8 +7,8 @@ import Sidebar from './Sidebar';
 const Homepage = () => {
   const [selected,setSelected]=useState(null);
 
-  const handleFocus=(e)=>{
-    setSelected(e);
+  const handleFocus=(option)=>{
+    setSelected(option);
   }
   return (
     <>
