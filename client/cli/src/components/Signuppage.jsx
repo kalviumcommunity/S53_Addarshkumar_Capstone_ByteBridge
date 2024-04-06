@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import {auth,provider} from "./firebaseauth/config";
 import { signInWithPopup,GithubAuthProvider  } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
 import {
   Heading,
   VStack,
@@ -54,6 +56,7 @@ const Signuppage = () => {
     try{
       const res =await axios.post("https://s53-addarshkumar-capstone-bytebridge.onrender.com/signup",data);
       Cookies.set("token",res.data.token,{ httpOnly: true, secure: true })
+
       toast({
         description:`${res.data.message}`,
         status: 'success',
@@ -79,6 +82,12 @@ const Signuppage = () => {
       </Text>
 
       <form onSubmit={handleSubmit(onSubmit)}>
+      <FormControl mt="30px" maxW={["xs", "sm", "sm", "sm"]} isInvalid={errors.name}>
+          <FormLabel>Your name</FormLabel>
+          <Input type="text" aria-label="Your name" {...register("name", { required: "Name is required" })} />
+          <FormErrorMessage>{errors.name && errors.name.message}</FormErrorMessage>
+        </FormControl>
+
       <FormControl mt="30px" maxW={["xs", "sm", "sm", "sm"]} isInvalid={errors.name}>
           <FormLabel>Your name</FormLabel>
           <Input type="text" aria-label="Your name" {...register("name", { required: "Name is required" })} />

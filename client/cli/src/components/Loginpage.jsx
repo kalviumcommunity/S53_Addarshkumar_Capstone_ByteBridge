@@ -10,7 +10,6 @@ import {
   Button,
   useToast,
   FormErrorMessage,
-  useStatStyles
 } from "@chakra-ui/react";
 import React,{useState} from "react";
 import { Link } from "react-router-dom";
@@ -20,6 +19,7 @@ import {auth,provider} from "./firebaseauth/config";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
+
 
 const Loginpage = () => {
   const {
@@ -57,7 +57,6 @@ const Loginpage = () => {
     try{
 
       const res=await axios.post("https://s53-addarshkumar-capstone-bytebridge.onrender.com/login",data);
-      console.log(res.data.token);
       Cookies.set("token",res.data.token,{ httpOnly: true, secure: true })
       toast({
         description:`${res.data.message}`,
