@@ -19,6 +19,9 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import axios from "axios"
+import Cookies from 'js-cookie';
+
 
 const Signuppage = () => {
   const [value,setValue]=useState("");
@@ -52,7 +55,8 @@ const Signuppage = () => {
   const onSubmit = async(data) => {
     try{
       const res =await axios.post("https://s53-addarshkumar-capstone-bytebridge.onrender.com/signup",data);
-      document.cookie=`token=${res.data.token}`
+      Cookies.set("token",res.data.token,{ httpOnly: true, secure: true })
+
       toast({
         description:`${res.data.message}`,
         status: 'success',
@@ -78,6 +82,11 @@ const Signuppage = () => {
       </Text>
 
       <form onSubmit={handleSubmit(onSubmit)}>
+      <FormControl mt="30px" maxW={["xs", "sm", "sm", "sm"]} isInvalid={errors.name}>
+          <FormLabel>Your name</FormLabel>
+          <Input type="text" aria-label="Your name" {...register("name", { required: "Name is required" })} />
+          <FormErrorMessage>{errors.name && errors.name.message}</FormErrorMessage>
+        </FormControl>
 
       <FormControl mt="30px" maxW={["xs", "sm", "sm", "sm"]} isInvalid={errors.name}>
           <FormLabel>Your name</FormLabel>
