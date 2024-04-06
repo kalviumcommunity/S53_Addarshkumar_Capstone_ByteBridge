@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import { signInWithPopup,GithubAuthProvider } from "firebase/auth";
 import {auth,provider} from "./firebaseauth/config";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Loginpage = () => {
   const {
@@ -51,16 +52,24 @@ const Loginpage = () => {
   };
   
 
-  const onSubmit = (data) => {
-    toast({
-      title: "Logged in",
-      description: "You are Logged in successfully",
-      status: "success",
-      position: "top",
-      duration: 4000,
-      isClosable: true,
-      colorScheme: "blue",
-    });
+  const onSubmit = async(data) => {
+    try{
+
+      const res=await axios.post("https://s53-addarshkumar-capstone-bytebridge.onrender.com/login",data);
+      document.cookie=`token=${res.data.token}`
+      toast({
+        description:`${res.data.message}`,
+        status: "success",
+        position: "top",
+        duration: 4000,
+        isClosable: true,
+        colorScheme: "blue",
+      });
+    }
+    catch(err){
+      console.log(err);
+    }
+    
   };
   return (
     <VStack>
@@ -108,11 +117,6 @@ const Loginpage = () => {
       <Text>Or continue with email</Text>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-      <FormControl mt="30px" maxW={["xs", "sm", "sm", "sm"]} isInvalid={errors.name}>
-          <FormLabel>Your name</FormLabel>
-          <Input type="text" aria-label="Your name" {...register("name", { required: "Name is required" })} />
-          <FormErrorMessage>{errors.name && errors.name.message}</FormErrorMessage>
-        </FormControl>
 
         <FormControl mt="30px" maxW={["xs", "sm", "sm", "sm"]} isInvalid={errors.email}>
           <FormLabel>Email address</FormLabel>

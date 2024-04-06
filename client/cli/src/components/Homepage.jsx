@@ -1,8 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { HStack, Image ,Button ,Text, VStack} from '@chakra-ui/react'
+import { HStack, Image ,Button ,Text, VStack, Icon} from '@chakra-ui/react'
+import Sidebar from './Sidebar';
+
 
 const Homepage = () => {
+  const [selected,setSelected]=useState(null);
+
+  const handleFocus=(e)=>{
+    setSelected(e);
+  }
   return (
     <>
     <HStack 
@@ -47,6 +54,42 @@ const Homepage = () => {
           boxSize={["70%","60%","40%","40%"]}
         />
     </HStack>
+    <HStack m={'5%'} alignItems="flex-start">
+  <Sidebar />
+  <VStack>
+    <HStack cursor={"pointer"} w={"500px"} justifyContent={"space-evenly"}>
+      <VStack onClick={()=>{handleFocus("recent")}}>
+      <Text>
+        Recent questions
+      </Text>
+      <div  style={{"width":"166px" , "height":"4px" ,"backgroundColor":selected=="recent"?"orange":"white"}}>
+
+      </div>
+      </VStack>
+
+      <VStack onClick={()=>{handleFocus("most")}}>
+      <Text>
+        Most answered
+      </Text>
+      <div  style={{"width":"166px" , "height":"4px" ,"backgroundColor":selected=="most"?"orange":"white"}}>
+
+</div>
+      </VStack>
+
+      <VStack onClick={()=>{handleFocus("trending")}}>
+      <Text>
+        Trending
+      </Text>
+      <div style={{"width":"166px" , "height":"4px" ,"backgroundColor":selected=="trending"?"orange":"white"}}>
+
+</div>
+      </VStack>
+    </HStack>
+  </VStack>
+  
+
+    </HStack>
+
     </>
   )
 }
