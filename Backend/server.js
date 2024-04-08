@@ -7,7 +7,9 @@ const port=process.env.PORT||5000;
 const questionRouter=require("./router/questionrouter");
 const blogRouter=require("./router/blogrouter");
 const userRouter=require("./router/userrouter");
+const cors=require("cors");
 app.use(express.json());
+app.use(cors());
 
 app.use((err, req, res, next) => {
     console.error(err.stack);

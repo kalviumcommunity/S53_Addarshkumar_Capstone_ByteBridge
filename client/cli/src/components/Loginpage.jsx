@@ -44,7 +44,6 @@ const Loginpage = () => {
   const handlegithub = () => {
     signInWithPopup(auth, new GithubAuthProvider())
       .then((result) => {
-        console.log(result);
         navigate("/");
       })
       .catch((error) => {
@@ -58,7 +57,7 @@ const Loginpage = () => {
 
       const res=await axios.post("https://s53-addarshkumar-capstone-bytebridge.onrender.com/login",data);
       console.log(res.data.token);
-      Cookies.set("token",res.data.token,{ httpOnly: true, secure: true })
+      Cookies.set("token",res.data.token)
       toast({
         description:`${res.data.message}`,
         status: "success",

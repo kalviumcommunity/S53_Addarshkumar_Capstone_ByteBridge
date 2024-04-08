@@ -23,7 +23,7 @@ const Sidebar = () => {
   return (
     <>
        
-   <VStack
+   <VStack 
     h={"55vh"} 
     justifyContent={"space-between"}  
     pl={["5%","5%","5%","5%"]}

@@ -41,7 +41,6 @@ const Navbar = () => {
         <Text>Home</Text>
         </Link>
         <Text>Blog</Text>
-        <Text>About us</Text>
         <Text>Contact us</Text>
         <Link to="/login">
         <Button colorScheme="orange">Login</Button>
