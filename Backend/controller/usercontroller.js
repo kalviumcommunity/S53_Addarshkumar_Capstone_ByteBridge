@@ -1,7 +1,5 @@
 const userModel = require("../model/userschema");
 const bcrypt = require("bcrypt");
-const jwt=require("jsonwebtoken");
-require("dotenv").config();
 
 const createUser = async (req, res) => {
     try {
@@ -11,26 +9,15 @@ const createUser = async (req, res) => {
         }
 
         try {
-            const expiresIn = '1h';
-
-            let token;
-            try {
-                token = jwt.sign({ email }, process.env.SECRET_KEY, { expiresIn });
-            } catch (error) {
-                console.error('Error generating JWT token:', error);
-                res.status(500).json({"message": "Internal Server Error"});
-                return;
-            }
-
             const salt = await bcrypt.genSalt(10);
             password = await bcrypt.hash(password, salt);
             const oldUser = await userModel.findOne({ email });
             if (oldUser) {
-                res.json({"message":"This email already exists"});
+                res.send("This email already exists");
             }
             else {
                 const user = await userModel.create({ name, email, password });
-                res.status(201).json({"message":"You are signed up successfully","token":token});
+                res.status(201).json(user);
             }
         }
         catch (err) {
@@ -40,7 +27,7 @@ const createUser = async (req, res) => {
     }
     catch (err) {
         console.log('error during creating user', err);
-        res.json({"message":"error during creating user"});
+        res.send("error during creating user");
     }
 }
 
@@ -52,29 +39,16 @@ const findUser = async (req, res) => {
         if (user) {
             const decryptedPassword = await bcrypt.compare(password, user.password)
             if (decryptedPassword) {
-                const expiresIn = '1h';
-
-                let token;
-                try {
-                    token = jwt.sign({ email }, process.env.SECRET_KEY, { expiresIn });
-                } catch (error) {
-                    console.error('Error generating JWT token:', error);
-                    res.status(500).json({"message": "Internal Server Error"});
-                    return;
-                }
-
-                res.status(201).json({"message":"successfully signed in","token":token});
+                res.status(201).json({ user });
             } else {
-                res.json({"message":"The password is incorrect"});
+                res.json("The password is incorrect");
             }
         } else {
-            res.json({"message":"No such user exists"});
+            res.json("No such user exists");
         }
     } catch (error) {
         console.log(error);
         res.status(500).json("Internal Server Error");
     }
 }
-
 module.exports = { createUser, findUser };
-
