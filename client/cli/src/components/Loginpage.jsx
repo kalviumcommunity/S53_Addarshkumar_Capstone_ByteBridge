@@ -55,8 +55,8 @@ const Loginpage = () => {
   const onSubmit = async(data) => {
     try{
 
-      const res=await axios.post("https://s53-addarshkumar-capstone-bytebridge.onrender.com/login",data);
-      console.log(res.data.token);
+      const res=await axios.post("http://localhost:4000/login",data);
+      console.log(res);
       Cookies.set("token",res.data.token)
       toast({
         description:`${res.data.message}`,
