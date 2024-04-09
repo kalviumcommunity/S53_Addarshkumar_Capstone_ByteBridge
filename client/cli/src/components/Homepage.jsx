@@ -10,7 +10,6 @@ import {
   Avatar,
   Heading,
 } from "@chakra-ui/react";
-import axios from "axios";
 import Sidebar from "./Sidebar";
 import { AppContext } from "./context/Parentcontext";
 
@@ -161,7 +160,7 @@ const Homepage = () => {
                         <HStack>
                           <Avatar
                             name="Dan Abrahmov"
-                            src={item.profileimage.length > 0 ? item.profileimage : "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="}
+                            src={item.profileimage ? item.profileimage : "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="}
                           />
                           <Text>
                             {item.username} <br />

@@ -1,6 +1,6 @@
 import React from 'react'
 import "./Sidebar.css"
-
+import { Link } from 'react-router-dom';
 import { HStack,VStack,Icon,Text,useDisclosure,Button } from '@chakra-ui/react';
 import {
     AlertDialog,
@@ -11,7 +11,7 @@ import {
     AlertDialogOverlay,
     AlertDialogCloseButton,
   } from '@chakra-ui/react'
-import { MdHome } from "react-icons/md";
+import { BsQuestionSquare } from "react-icons/bs";
 import { BsFillQuestionSquareFill } from "react-icons/bs";
 import { MdLeaderboard } from "react-icons/md";
 import { FaUsers } from "react-icons/fa";
@@ -29,8 +29,10 @@ const Sidebar = () => {
     pl={["5%","5%","5%","5%"]}
    >
     <HStack className="nav-icon" width={"120%"}>
-    <Icon boxSize={"6"} as={MdHome} />
-    <Text>Home</Text>
+    <Icon boxSize={"6"} as={BsQuestionSquare} />
+    <Link to={"/questionpage"}>
+    <Text>Ask questions</Text>
+    </Link>
     </HStack>
 
     <HStack className="nav-icon" width={"120%"}>
