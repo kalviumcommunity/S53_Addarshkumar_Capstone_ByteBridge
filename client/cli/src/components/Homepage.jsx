@@ -9,12 +9,14 @@ import {
   Card,
   Avatar,
   Heading,
+  Img,
 } from "@chakra-ui/react";
 import Sidebar from "./Sidebar";
 import { AppContext } from "./context/Parentcontext";
 
 const Homepage = () => {
   const { data } = useContext(AppContext);
+  const { imageUrl } = useContext(AppContext);
   const [selected, setSelected] = useState("all");
 
   const handleFocus = (option) => {
@@ -23,6 +25,7 @@ const Homepage = () => {
   
   return (
     <>
+
       <HStack
         display={["flex", "flex", "flex", "flex"]}
         flexDirection={["column-reverse", "column-reverse", "row", "row"]}
@@ -169,7 +172,7 @@ const Homepage = () => {
                         <br />
 
                         <div>
-                          <Text size="md">{item.question}</Text>
+                          {item.question?<Text size="md">{item.question}</Text>:<Image src={item.questionImage} />}
                         </div>
                         <br />
                       <HStack>

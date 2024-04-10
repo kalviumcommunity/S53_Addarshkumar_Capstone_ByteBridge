@@ -7,7 +7,7 @@ const {getQuestion,getAnswers, postQuestion, postAnswer,jwtVerify}=require("../c
 questionRouter.get("/question",getQuestion);
 questionRouter.get("/answer",getAnswers);
 
-questionRouter.post("/question",jwtVerify,postQuestion);
+questionRouter.post("/question", jwtVerify, postQuestion);
 questionRouter.post("/answer",postAnswer);
 
 module.exports=questionRouter;

@@ -32,18 +32,19 @@ const getQuestion=async(req,res)=>{
     }
 }
 
-
-const postQuestion = async (req, res) => {
+  
+  const postQuestion = async (req, res) => {
     try {
-        const { name } = req.user;
-        const questionData = { ...req.body, username: name };
-        const question = await dataModel.create(questionData);
-        res.status(201).json({"message":"question posted successfully"});
+      const { name } = req.user;
+      const questionData = { ...req.body, username: name };
+      const question = await dataModel.create(questionData);
+      res.status(201).json({ message: "question posted successfully" });
     } catch (err) {
-        console.error("Error during posting questions:", err);
-        res.status(500).json({ message: "You should sign in first" });
+      console.error("Error during posting questions:", err);
+      res.status(500).json({ message: "You should sign in first" });
     }
-}
+  };
+
 
 
 const getAnswers=async(req,res)=>{

@@ -10,8 +10,10 @@ const dataSchema=new mongoose.Schema({
     },
     question:{
         type:String,
-        required:true
     },
+    questionImage:{
+        type:String
+    }
 
 })
 
