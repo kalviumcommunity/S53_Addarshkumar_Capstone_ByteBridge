@@ -14,7 +14,7 @@ const jwtVerify = (req, res, next) => {
         req.user = decoded;
         next();
     } catch (err) {
-        next(new Error(403, "Not authorised to access this route without correct auth token"));
+        res.status(403).json({ message: "You should sign in first" })
     }
 };
 
@@ -37,12 +37,11 @@ const postQuestion = async (req, res) => {
     try {
         const { name } = req.user;
         const questionData = { ...req.body, username: name };
-        console.log(questionData);
         const question = await dataModel.create(questionData);
-        res.status(201).json(question);
+        res.status(201).json({"message":"question posted successfully"});
     } catch (err) {
         console.error("Error during posting questions:", err);
-        res.status(500).send("Error during posting questions");
+        res.status(500).json({ message: "You should sign in first" });
     }
 }
 

@@ -1,11 +1,21 @@
-import { Textarea, Button, VStack, Text } from '@chakra-ui/react'
+import { Textarea, Button, VStack, Text,useToast } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import axios from 'axios';
 
 const Questionpage = () => {
+    const toast=useToast();
     const [value, setValue] = useState("");
 
-    const token = document.cookie.split('; ').find(row => row.startsWith('token=')).split('=')[1];
+    let token = "";
+
+const tokenCookie = document.cookie.split('; ').find(row => row.startsWith('token='));
+
+if (tokenCookie) { 
+    token = tokenCookie.split('=')[1];
+} else {
+    console.error("Token cookie not found");
+}
+
     const postData = async () => {
         const data = {
             question: value,
@@ -20,8 +30,16 @@ const Questionpage = () => {
                         Authorization: `Bearer ${token}`
                     }
                 }
-                
-            );
+                );
+                toast({
+                    description:`${res.data.message}`,
+                    status: "success",
+                    position: "top",
+                    duration: 4000,
+                    isClosable: true,
+                    colorScheme: "blue",
+                  });
+              
         } catch (error) {
             console.error("Error while posting question:", error);
         }
