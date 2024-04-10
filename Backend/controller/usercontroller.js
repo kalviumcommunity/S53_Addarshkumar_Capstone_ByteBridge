@@ -7,7 +7,7 @@ const createUser = async (req, res) => {
     try {
         let { name, email, password } = req.body;
         if (!email || !name || !password) {
-            res.send("please enter all fields")
+            res.json({"message":"please enter all fields"})
         }
 
         try {
@@ -51,12 +51,13 @@ const findUser = async (req, res) => {
 
         if (user) {
             const decryptedPassword = await bcrypt.compare(password, user.password)
+            const {name} =user;
             if (decryptedPassword) {
                 const expiresIn = '1h';
 
                 let token;
                 try {
-                    token = jwt.sign({ email }, process.env.SECRET_KEY, { expiresIn });
+                    token = jwt.sign({ email,name }, process.env.SECRET_KEY, { expiresIn });
                 } catch (error) {
                     console.error('Error generating JWT token:', error);
                     res.status(500).json({"message": "Internal Server Error"});

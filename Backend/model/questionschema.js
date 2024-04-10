@@ -2,10 +2,11 @@ const mongoose=require('mongoose');
 
 const dataSchema=new mongoose.Schema({
     username:{
-      type:String
+      type:String,
+      required:true
     },
     profileimage:{
-        type:String
+        type:String,
     },
     question:{
         type:String,

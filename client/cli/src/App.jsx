@@ -5,7 +5,7 @@ import {Routes,Route} from "react-router-dom"
 import Loginpage from "./components/Loginpage"
 import Signuppage from "./components/Signuppage"
 import Phonesignin from "./components/Phonesignin"
-
+import Questionpage from "./components/Questionpage"
 function App() {
 
   return (
@@ -16,6 +16,7 @@ function App() {
      <Route path="/login" element={<Loginpage />} />
      <Route path="/signup" element={<Signuppage />} />
      <Route path="/phonelogin" element={<Phonesignin />} />
+     <Route path="/questionpage" element={<Questionpage />} />
 
      </Routes>
      <Footer />
