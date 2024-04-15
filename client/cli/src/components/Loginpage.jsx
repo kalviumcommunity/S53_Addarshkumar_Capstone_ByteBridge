@@ -10,7 +10,6 @@ import {
   Button,
   useToast,
   FormErrorMessage,
-  useStatStyles
 } from "@chakra-ui/react";
 import React,{useState} from "react";
 import { Link } from "react-router-dom";
@@ -56,8 +55,7 @@ const Loginpage = () => {
     try{
 
       const res=await axios.post("http://localhost:4000/login",data);
-      console.log(res);
-      Cookies.set("token",res.data.token)
+      Cookies.set("token",res.data.token) 
       toast({
         description:`${res.data.message}`,
         status: "success",
@@ -66,9 +64,16 @@ const Loginpage = () => {
         isClosable: true,
         colorScheme: "blue",
       });
+      navigate("/")
     }
     catch(err){
-      console.log(err);
+      toast({
+        description:`${err.response.data.message}`,
+        position: "top",
+        duration: 4000,
+        isClosable: true,
+        colorScheme: "red",
+      });
     }
     
   };

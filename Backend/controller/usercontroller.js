@@ -66,10 +66,10 @@ const findUser = async (req, res) => {
 
                 res.status(201).json({"message":"successfully signed in","token":token});
             } else {
-                res.json({"message":"The password is incorrect"});
+                res.status(401).json({"message":"The password is incorrect"});
             }
         } else {
-            res.json({"message":"No such user exists"});
+            res.status(404).json({"message":"No such user exists"});
         }
     } catch (error) {
         console.log(error);
