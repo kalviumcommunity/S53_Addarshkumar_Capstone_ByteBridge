@@ -16,7 +16,6 @@ import { AppContext } from "./context/Parentcontext";
 
 const Homepage = () => {
   const { data } = useContext(AppContext);
-  const { imageUrl } = useContext(AppContext);
   const [selected, setSelected] = useState("all");
 
   const handleFocus = (option) => {
