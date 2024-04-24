@@ -54,7 +54,7 @@ const AppProvider = ({ children }) => {
 
   const getData = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/question");
+      const res = await axios.get("https://s53-addarshkumar-capstone-bytebridge.onrender.com/question");
       setData(res.data.questions);
     } catch (err) {
       console.log(err);

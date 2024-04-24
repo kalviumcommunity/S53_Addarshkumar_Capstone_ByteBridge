@@ -37,7 +37,7 @@ const Signuppage = () => {
         };
 
         try {
-          const res = await axios.post("http://localhost:4000/signup", data);
+          const res = await axios.post("https://s53-addarshkumar-capstone-bytebridge.onrender.com/signup", data);
           console.log(res);
           Cookies.set("token", res.data.token);
         } catch (err) {
@@ -63,7 +63,7 @@ const Signuppage = () => {
 
   const onSubmit = async (data) => {
     try {
-      const res = await axios.post("http://localhost:4000/signup", data);
+      const res = await axios.post("https://s53-addarshkumar-capstone-bytebridge.onrender.com/signup", data);
       Cookies.set("token", res.data.token)
       toast({
         description: `${res.data.message}`,
