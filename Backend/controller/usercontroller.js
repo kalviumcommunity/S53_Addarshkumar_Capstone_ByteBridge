@@ -5,17 +5,19 @@ require("dotenv").config();
 
 const createUser = async (req, res) => {
     try {
+        if(!req.body.password){
+            req.body.password=process.env.RANDOM_PASSWORD;
+        }
         let { name, email, password } = req.body;
-        if (!email || !name || !password) {
+        if (!email || !name || !password ) {
             res.json({"message":"please enter all fields"})
         }
 
         try {
-            const expiresIn = '1h';
 
             let token;
             try {
-                token = jwt.sign({ email }, process.env.SECRET_KEY, { expiresIn });
+                token = jwt.sign({ email,name }, process.env.SECRET_KEY);
             } catch (error) {
                 console.error('Error generating JWT token:', error);
                 res.status(500).json({"message": "Internal Server Error"});
@@ -46,6 +48,9 @@ const createUser = async (req, res) => {
 
 const findUser = async (req, res) => {
     try {
+        if(!req.body.password){
+            req.body.password=process.env.RANDOM_PASSWORD;
+        }
         const { email, password } = req.body;
         const user = await userModel.findOne({ email });
 
@@ -53,11 +58,10 @@ const findUser = async (req, res) => {
             const decryptedPassword = await bcrypt.compare(password, user.password)
             const {name} =user;
             if (decryptedPassword) {
-                const expiresIn = '1h';
 
                 let token;
                 try {
-                    token = jwt.sign({ email,name }, process.env.SECRET_KEY, { expiresIn });
+                    token = jwt.sign({ email,name }, process.env.SECRET_KEY);
                 } catch (error) {
                     console.error('Error generating JWT token:', error);
                     res.status(500).json({"message": "Internal Server Error"});

@@ -1,7 +1,5 @@
-import React, { useState } from "react";
-import {auth,provider} from "./firebaseauth/config";
-import { signInWithPopup,GithubAuthProvider  } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useContext, useEffect } from "react";
+import { AppContext } from "./context/Parentcontext";
 import {
   Heading,
   VStack,
@@ -19,58 +17,70 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios"
 import Cookies from 'js-cookie';
+import { signInWithPopup,GithubAuthProvider} from "firebase/auth";
+import { auth, provider } from "./firebaseauth/config";
 
 const Signuppage = () => {
-  const [value,setValue]=useState("");
+  const { handlegithub } = useContext(AppContext);
+  const [username, setUserName] = useState(null);
+  const [useremail, setUserEmail] = useState(null);
 
   const toast = useToast()
   const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const navigate=useNavigate();
+  useEffect(() => {
+    const fetchData = async () => {
+      if (username && useremail) {
+        const data = {
+          name: username,
+          email: useremail,
+        };
 
-  const handlesignup=()=>{
-    signInWithPopup(auth,provider).then((data)=>{
-      setValue(data)
-      navigate("/")
-    })
-    .catch((error)=>{
-      console.log(error)
-    })
-  }
+        try {
+          const res = await axios.post("https://s53-addarshkumar-capstone-bytebridge.onrender.com/signup", data);
+          console.log(res);
+          Cookies.set("token", res.data.token);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    };
 
-  const handlegithub = () => {
-    signInWithPopup(auth, new GithubAuthProvider())
-      .then((result) => {
-        console.log(result);
-        navigate("/");
+    fetchData();
+  }, [username, useremail]);
+
+  const handleLogin = async () => {
+    await signInWithPopup(auth, provider)
+      .then((data) => {
+        console.log(data);
+        setUserName(data.user.displayName);
+        setUserEmail(data.user.email);
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error);
       });
   };
 
-  const onSubmit = async(data) => {
-    try{
-      const res =await axios.post("http://localhost:4000/signup",data);
-      Cookies.set("token",res.data.token)
+  const onSubmit = async (data) => {
+    try {
+      const res = await axios.post("https://s53-addarshkumar-capstone-bytebridge.onrender.com/signup", data);
+      Cookies.set("token", res.data.token)
       toast({
-        description:`${res.data.message}`,
+        description: `${res.data.message}`,
         status: 'success',
-        position:'top',
+        position: 'top',
         duration: 4000,
         isClosable: true,
-        colorScheme:'blue'
-  
+        colorScheme: 'blue'
       })
-    }
-    catch(err){
+    } catch (err) {
       console.log(err);
     }
   };
 
   return (
     <VStack>
-        <Heading fontSize="20px" mt="40px">
+      <Heading fontSize="20px" mt="40px">
         Sign up
       </Heading>
       <Text mt="20px">
@@ -78,7 +88,7 @@ const Signuppage = () => {
       </Text>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-      <FormControl mt="30px" maxW={["xs", "sm", "sm", "sm"]} isInvalid={errors.name}>
+        <FormControl mt="30px" maxW={["xs", "sm", "sm", "sm"]} isInvalid={errors.name}>
           <FormLabel>Your name</FormLabel>
           <Input type="text" aria-label="Your name" {...register("name", { required: "Name is required" })} />
           <FormErrorMessage>{errors.name && errors.name.message}</FormErrorMessage>
@@ -104,7 +114,7 @@ const Signuppage = () => {
       <Text mt="20px">Or</Text>
 
       <HStack
-       onClick={handlesignup}
+        onClick={handleLogin}
         border="1px solid gray"
         w={["80%", "50%", "30%", "25%"]}
         borderRadius="25px"
@@ -146,9 +156,9 @@ const Signuppage = () => {
           src="/phone.png"
           boxSize="28px"
         />
-      <Link to={"/phonelogin"}>
-        <Text>Continue with phone</Text>
-</Link>
+        <Link to={"/phonelogin"}>
+          <Text>Continue with phone</Text>
+        </Link>
       </HStack>
     </VStack>
   );

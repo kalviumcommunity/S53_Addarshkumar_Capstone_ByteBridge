@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useContext, useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import {
   HStack,
@@ -8,6 +8,7 @@ import {
   Icon,
   useDisclosure,
   VStack,
+  Avatar,
 } from "@chakra-ui/react";
 import {
   Drawer,
@@ -19,9 +20,13 @@ import {
 } from "@chakra-ui/react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { CiLogout } from "react-icons/ci";
+import { AppContext } from "./context/Parentcontext";
 
 const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {photoURL}=useContext(AppContext);
+  // const {value}=useContext(AppContext);
+
   return (
     <>
       <HStack
@@ -45,6 +50,7 @@ const Navbar = () => {
         <Link to="/login">
         <Button colorScheme="orange">Login</Button>
         </Link>
+        <Avatar boxSize={"40px"} src={photoURL} />
       </HStack>
 
       <HStack

@@ -11,14 +11,15 @@ import {
   useToast,
   FormErrorMessage,
 } from "@chakra-ui/react";
-import React,{useState} from "react";
+import React,{useContext, useState,useEffect} from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { signInWithPopup,GithubAuthProvider } from "firebase/auth";
-import {auth,provider} from "./firebaseauth/config";
 import { useNavigate } from "react-router-dom";
+import { signInWithPopup,GithubAuthProvider} from "firebase/auth";
+import { auth, provider } from "./firebaseauth/config";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { AppContext } from "./context/Parentcontext";
 
 const Loginpage = () => {
   const {
@@ -28,34 +29,49 @@ const Loginpage = () => {
   } = useForm();
   const toast = useToast();
   const navigate=useNavigate();
-  const [value,setValue]=useState("");
+  const {handlegithub} =useContext(AppContext);
+  const [username, setUserName] = useState(null);
+  const [useremail, setUserEmail] = useState(null);
 
-  const handleLogin=()=>{
-    signInWithPopup(auth,provider).then((data)=>{
-      setValue(data)
-      navigate("/")
-    })
-    .catch((error)=>{
-      console.log(error)
-    })
-  }
 
-  const handlegithub = () => {
-    signInWithPopup(auth, new GithubAuthProvider())
-      .then((result) => {
-        navigate("/");
+  useEffect(() => {
+    const fetchData = async () => {
+      if (username && useremail) {
+        const data = {
+          name: username,
+          email: useremail,
+        };
+
+        try {
+          const res = await axios.post("https://s53-addarshkumar-capstone-bytebridge.onrender.com/login", data);
+          console.log(res);
+          Cookies.set("token", res.data.token);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    };
+
+    fetchData();
+  }, [username, useremail]);
+
+  const handleLogin = async () => {
+    await signInWithPopup(auth, provider)
+      .then((data) => {
+        console.log(data);
+        setUserName(data.user.displayName);
+        setUserEmail(data.user.email);
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error);
       });
   };
-  
 
   const onSubmit = async(data) => {
     try{
-
-      const res=await axios.post("http://localhost:4000/login",data);
-      Cookies.set("token",res.data.token) 
+      
+      const res=await axios.post("https://s53-addarshkumar-capstone-bytebridge.onrender.com/login",data);
+      Cookies.set("token",res.data.token);
       toast({
         description:`${res.data.message}`,
         status: "success",
