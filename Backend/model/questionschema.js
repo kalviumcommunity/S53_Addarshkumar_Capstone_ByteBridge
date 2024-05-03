@@ -1,6 +1,15 @@
 const mongoose=require('mongoose');
+const answerModel=require("./answerschema")
 
 const dataSchema=new mongoose.Schema({
+    answer_id:{
+        answers:[
+            {
+                type:mongoose.Schema.Types.ObjectId,
+                ref:"answers"
+            }
+        ]
+    },
     username:{
       type:String,
       required:true
@@ -15,7 +24,7 @@ const dataSchema=new mongoose.Schema({
         type:String
     }
 
-})
+});
 
 const dataModel=mongoose.model("questions",dataSchema);
-module.exports=dataModel
+module.exports=dataModel;

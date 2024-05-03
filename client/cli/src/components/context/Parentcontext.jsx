@@ -21,13 +21,7 @@ const AppProvider = ({ children }) => {
     }
   });
 
-  const handlegithub = () => {
-    signInWithPopup(auth, new GithubAuthProvider())
-      .then((result) => {})
-      .catch((error) => {
-        console.error(error);
-      });
-  };
+
 
   const img_id=localStorage.getItem("img_id");
 
@@ -54,19 +48,23 @@ const AppProvider = ({ children }) => {
 
   const getData = async () => {
     try {
-      const res = await axios.get("https://s53-addarshkumar-capstone-bytebridge.onrender.com/question");
-      setData(res.data.questions);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+        const res = await axios.get("https://s53-addarshkumar-capstone-bytebridge.onrender.com/question");
 
-  useEffect(() => {
-    getData();
-  }, []);
+        setData(res.data.questions);
+      } 
+      catch (err) {
+        console.log(err);
+      }
+    };
+    
+    
+    useEffect(() => {
+        getData();
+
+    }, []);
 
   return (
-    <AppContext.Provider value={{ data, imageUrl, handlegithub, photoURL, isUser }}>
+    <AppContext.Provider value={{ data, imageUrl, photoURL, isUser }}>
       {children}
     </AppContext.Provider>
   );

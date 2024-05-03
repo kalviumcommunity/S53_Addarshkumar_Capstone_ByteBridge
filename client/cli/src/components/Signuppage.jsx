@@ -17,14 +17,15 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios"
 import Cookies from 'js-cookie';
+import { useNavigate } from "react-router-dom";
 import { signInWithPopup,GithubAuthProvider} from "firebase/auth";
 import { auth, provider } from "./firebaseauth/config";
 
 const Signuppage = () => {
-  const { handlegithub } = useContext(AppContext);
   const [username, setUserName] = useState(null);
   const [useremail, setUserEmail] = useState(null);
 
+  const navigate=useNavigate();
   const toast = useToast()
   const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -61,6 +62,18 @@ const Signuppage = () => {
       });
   };
 
+  const handlegithub = () => {
+    signInWithPopup(auth, new GithubAuthProvider())
+      .then((result) => {
+        setUserEmail(result.user.email)
+        setUserName(result.user.displayName)
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+
   const onSubmit = async (data) => {
     try {
       const res = await axios.post("https://s53-addarshkumar-capstone-bytebridge.onrender.com/signup", data);
@@ -73,6 +86,9 @@ const Signuppage = () => {
         isClosable: true,
         colorScheme: 'blue'
       })
+      setTimeout(()=>{
+        navigate("/")
+      },2000)
     } catch (err) {
       console.log(err);
     }

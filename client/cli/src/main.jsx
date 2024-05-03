@@ -6,7 +6,16 @@ import theme from './theme.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import AppProvider from './components/context/Parentcontext.jsx'
 
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from 'recoil';
+
 ReactDOM.createRoot(document.getElementById('root')).render(
+<RecoilRoot>
 
   <ChakraProvider theme={theme}>
     <AppProvider>
@@ -15,4 +24,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     </BrowserRouter>
     </AppProvider>
   </ChakraProvider>
+</RecoilRoot>
 )

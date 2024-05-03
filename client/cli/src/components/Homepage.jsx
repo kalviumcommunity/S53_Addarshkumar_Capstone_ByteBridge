@@ -8,27 +8,24 @@ import {
   VStack,
   Card,
   Avatar,
-  Heading,
-  Img,
+  Box,
+  SkeletonText,
+  SkeletonCircle
 } from "@chakra-ui/react";
 import Sidebar from "./Sidebar";
 import { AppContext } from "./context/Parentcontext";
 
 const Homepage = () => {
-  const { data} = useContext(AppContext);
+  const { data } = useContext(AppContext);
 
   const [selected, setSelected] = useState("all");
-
-  
 
   const handleFocus = (option) => {
     setSelected(option);
   };
-  
-  
+
   return (
     <>
-
       <HStack
         display={["flex", "flex", "flex", "flex"]}
         flexDirection={["column-reverse", "column-reverse", "row", "row"]}
@@ -53,7 +50,7 @@ const Homepage = () => {
               mt="20px"
               w={["90%", "none", "none", "none"]}
             >
-              Create Account
+              Create New Account
             </Button>
           </Link>
         </VStack>
@@ -65,17 +62,10 @@ const Homepage = () => {
         />
       </HStack>
 
-      <HStack m={"5%"} alignItems="flex-start"
-      justifyContent={"space-between"}
-      >
+      <HStack m={"5%"} alignItems="flex-start" justifyContent={"space-between"}>
         <Sidebar />
-        <VStack 
-         w={["80%","80%","80%","80%"]}
-        >
-          <HStack
-            w={["80%","80%","100%","100%"]}
-            cursor={"pointer"}
-          >
+        <VStack w={["80%", "80%", "80%", "80%"]}>
+          <HStack w={["80%", "80%", "100%", "100%"]} cursor={"pointer"}>
             <VStack
               onClick={() => {
                 handleFocus("all");
@@ -133,28 +123,25 @@ const Homepage = () => {
                   backgroundColor: selected == "trending" ? "orange" : "white",
                 }}
               ></div>
-
             </VStack>
-             </HStack>
-            
-            <VStack 
+          </HStack>
+
+          <VStack
             overflow={"scroll"}
             overflowX={"hidden"}
-            w={["80%","80%","100%","100%"]}
-            h={["50vh","50vh","70vh","70vh"]}
-            >
-            
-            {data &&
+            w={["80%", "80%", "100%", "100%"]}
+            h={["50vh", "50vh", "70vh", "70vh"]}
+          >
+            {data.length>0 ? (
               data.map((item) => (
                 <HStack
-                 w={["80%","80%","100%","100%"]}
+                  w={["80%", "80%", "100%", "100%"]}
                   key={item._id}
                   className="card-component"
                   padding={"20px"}
                 >
                   <Card
-                   w={["80%","80%","100%","100%"]}
-
+                    w={["80%", "80%", "100%", "100%"]}
                     className="card"
                     padding={"10px"}
                     direction={{ base: "column", sm: "row" }}
@@ -166,7 +153,11 @@ const Homepage = () => {
                         <HStack>
                           <Avatar
                             name="Dan Abrahmov"
-                            src={item.profileimage ? item.profileimage : "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="}
+                            src={
+                              item.profileimage
+                                ? item.profileimage
+                                : "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="
+                            }
                           />
                           <Text>
                             {item.username} <br />
@@ -175,20 +166,41 @@ const Homepage = () => {
                         <br />
 
                         <div>
-                          {item.question?<Text size="md">{item.question}</Text>:<Image src={item.questionImage} />}
+                          {item.question ? (
+                            <Text size="md">{item.question}</Text>
+                          ) : (
+                            <Image src={item.questionImage} />
+                          )}
                         </div>
                         <br />
-                      <HStack>
-                        <Button backgroundColor="black" color="white">Answer</Button>
-                        <Text cursor={"pointer"}>View answer</Text>
-                      </HStack>
+                        <HStack>
+                          <Link to={`/answerpage/${item._id}`}>
+                            {" "}
+                            <Button backgroundColor="black" color="white">
+                              Answer
+                            </Button>
+                          </Link>
+                          <Link to={"/answerpage"}>
+                            <Text cursor={"pointer"}>View answer</Text>
+                          </Link>
+                        </HStack>
                       </div>
                     </VStack>
-                   
                   </Card>
                 </HStack>
-              ))}
-            </VStack>
+              ))
+            ) : (
+              <Box padding="6" boxShadow="lg" bg="white" w="100%">
+                <SkeletonCircle size="10" />
+                <SkeletonText
+                  mt="4"
+                  noOfLines={4}
+                  spacing="4"
+                  skeletonHeight="2"
+                />
+              </Box>
+            )}
+          </VStack>
         </VStack>
       </HStack>
     </>

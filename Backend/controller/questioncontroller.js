@@ -18,9 +18,6 @@ const jwtVerify = (req, res, next) => {
     }
 };
 
-
-
-
 const getQuestion=async(req,res)=>{
     try{
         const questions=await dataModel.find({})
@@ -47,26 +44,42 @@ const getQuestion=async(req,res)=>{
 
 
 
-const getAnswers=async(req,res)=>{
-    try{
-        const answers=await answerModel.find({})
-        res.status(200).json({answers});
+  const getAnswers = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const answer = await dataModel.findById(id).populate("answer_id.answers");
+      const question=await dataModel.findById(id);
+      if (!question) {
+        return res.status(404).json({ message: "Question not found" });
+      }
+      const answerArray=answer.answer_id.answers;
+      res.json({answerArray,question});
+    } catch (err) {
+      console.error("Error during fetching answers:", err);
+      res.status(500).send("Error during fetching answers");
     }
-    catch(err){
-        console.error("Error during fetching answers:", err);
-        res.status(500).send("Error during fetching answers");
-    }
-}
+  }
+  
 
-const postAnswer=async(req,res)=>{
-    try{
-        const answers=await answerModel.create(req.body);
-        res.status(201).json(answers);
+
+  const postAnswer = async (req, res) => {
+    try {
+      const { id } = req.params;     
+      const {name} =req.user;
+      const answerData={...req.body,username:name}
+      const newAnswer = await answerModel.create(answerData);
+      await dataModel.findByIdAndUpdate(
+        id,
+        { $push: { "answer_id.answers": newAnswer._id } },
+        { new: true }
+      );
+
+      res.status(201).json(newAnswer);
+    } catch (err) {
+      console.error("Error during posting answers:", err);
+      res.status(500).send("Error during posting answers");  
     }
-    catch(err){
-        console.error("Error during posting answers:", err);
-        res.status(500).send("Error during posting answers");
-    }
-}
+  };
+  
 
 module.exports={getQuestion,getAnswers,postQuestion,postAnswer,jwtVerify}
