@@ -20,6 +20,11 @@ import { CiLogout } from "react-icons/ci";
 
 const Sidebar = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
+
+    const handleLogout=()=>{
+      document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    }
+
   return (
     <>
        
@@ -77,7 +82,7 @@ const Sidebar = () => {
               <Button onClick={onClose}>
                 Cancel
               </Button>
-              <Button colorScheme='red' onClick={onClose} ml={3}>
+              <Button colorScheme='red' onClick={()=>{onClose();handleLogout();}} ml={3}>
                 Logout
               </Button>
             </AlertDialogFooter>

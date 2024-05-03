@@ -37,11 +37,6 @@ const Questionpage = () => {
      localStorage.setItem("img_id",currImage)
   },[currImage])
 
-
-  
-  
-  console.log(imageUrl);
-
   const postData = async () => {
     try {
       const data = {

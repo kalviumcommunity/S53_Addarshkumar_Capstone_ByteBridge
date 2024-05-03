@@ -11,7 +11,7 @@ import {
   useToast,
   FormErrorMessage,
 } from "@chakra-ui/react";
-import React,{useContext, useState,useEffect} from "react";
+import React,{ useState,useEffect} from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -29,10 +29,8 @@ const Loginpage = () => {
   } = useForm();
   const toast = useToast();
   const navigate=useNavigate();
-  const {handlegithub} =useContext(AppContext);
   const [username, setUserName] = useState(null);
   const [useremail, setUserEmail] = useState(null);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,9 +59,28 @@ const Loginpage = () => {
         console.log(data);
         setUserName(data.user.displayName);
         setUserEmail(data.user.email);
+        setTimeout(()=>{
+          navigate("/");
+
+        },3000)
       })
       .catch((error) => {
         console.log(error);
+      });
+  };
+
+  
+  const handlegithub = () => {
+    signInWithPopup(auth, new GithubAuthProvider())
+      .then((result) => {
+        setUserEmail(result.user.email)
+        setUserName(result.user.displayName)
+        setTimeout(()=>{
+          navigate("/")
+        },2000)
+      })
+      .catch((error) => {
+        console.error(error);
       });
   };
 
