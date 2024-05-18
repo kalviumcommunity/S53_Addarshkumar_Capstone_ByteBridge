@@ -15,14 +15,14 @@ import {
 } from 'recoil';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-<RecoilRoot>
 
   <ChakraProvider theme={theme}>
+<RecoilRoot>
     <AppProvider>
     <BrowserRouter>
      <App />
     </BrowserRouter>
     </AppProvider>
-  </ChakraProvider>
 </RecoilRoot>
+  </ChakraProvider>
 )

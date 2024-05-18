@@ -7,6 +7,7 @@ import Signuppage from "./components/Signuppage"
 import Phonesignin from "./components/Phonesignin"
 import Questionpage from "./components/Questionpage"
 import Answerpage from "./components/Answerpage"
+import Profilepage from "./components/Profilepage"
 function App() {
 
 
@@ -20,8 +21,9 @@ function App() {
      <Route path="/phonelogin" element={<Phonesignin />} />
      <Route path="/questionpage" element={<Questionpage />} />
      <Route path="/answerpage/:id" element={<Answerpage />} />
+     <Route path="/profilepage" element={<Profilepage />} />
      </Routes>
-     <Footer />
+     {/* <Footer /> */}
     </>
   )
 }

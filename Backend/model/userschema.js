@@ -14,6 +14,22 @@ const userSchema=new mongoose.Schema({
         type:String,
         required:true,
         minlength: 6 
+    },
+    questions:{
+        questions_id:[
+            {
+                type:mongoose.Schema.Types.ObjectId,
+                ref:"questions"
+            }
+        ]
+    },
+    answers:{
+        answers_id:[
+            {
+                type:mongoose.Schema.Types.ObjectId,
+                ref:"answers"
+            }
+        ]
     }
 
 })

@@ -10,10 +10,13 @@ import {
   Button,
   SkeletonCircle,
   SkeletonText,
-  Box
+  Box,
+  Icon
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { AiOutlineLike } from "react-icons/ai";
+import { FaCommentDots } from "react-icons/fa";
 
 const Answerpage = () => {
   const [value, setValue] = useState("");
@@ -35,7 +38,7 @@ const Answerpage = () => {
 
   const handlePost = async () => {
     try {
-      const data = {
+      const data = { 
         answer: value,
       };
       const res = await axios.post(`https://s53-addarshkumar-capstone-bytebridge.onrender.com/answer/${id}`, data, {
@@ -112,8 +115,13 @@ const Answerpage = () => {
               overflow="hidden"
               variant="outline"
             >
-              <VStack>
-                <div>
+              <VStack
+               w={"100%"}
+               alignItems={"flex-start"}
+              >
+                <div 
+                style={{width:"100%"}}
+                >
                   <HStack>
                     <Avatar
                       name="Dan Abrahmov"
@@ -127,6 +135,13 @@ const Answerpage = () => {
 
                   <div>{item.answer}</div>
                   <br />
+                  <HStack 
+                  w={"15%"}
+                  justifyContent={"space-evenly"}
+                  >
+                    <Icon boxSize={"5"} as={AiOutlineLike} />
+                    <Icon boxSize={"5"} as={FaCommentDots} />
+                  </HStack>
                 </div>
               </VStack>
             </Card>

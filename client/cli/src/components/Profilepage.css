@@ -1,0 +1,7 @@
+.banner{
+    background-image:url("../../public/profile.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 30vh;
+}
