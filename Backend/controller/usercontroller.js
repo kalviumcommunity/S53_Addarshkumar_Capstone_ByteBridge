@@ -1,26 +1,42 @@
 const userModel = require("../model/userschema");
 const bcrypt = require("bcrypt");
-const jwt=require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
+const answerModel = require("../model/answerschema");
 require("dotenv").config();
+
+const jwtVerify = (req, res, next) => {
+    try {
+        let { authorization } = req.headers;
+        if (!authorization) {
+            throw new Error("Authorization header is missing");
+        }
+        let token = authorization.split(' ')[1];
+        let decoded = jwt.verify(token, process.env.SECRET_KEY);  
+        req.user = decoded;
+        next();
+    } catch (err) {
+        res.status(403).json({ message: "You should sign in first" })
+    }
+};
 
 const createUser = async (req, res) => {
     try {
-        if(!req.body.password){
-            req.body.password=process.env.RANDOM_PASSWORD;
+        if (!req.body.password) {
+            req.body.password = process.env.RANDOM_PASSWORD;
         }
         let { name, email, password } = req.body;
-        if (!email || !name || !password ) {
-            res.json({"message":"please enter all fields"})
+        if (!email || !name || !password) {
+            res.json({ "message": "please enter all fields" })
         }
 
         try {
 
             let token;
             try {
-                token = jwt.sign({ email,name }, process.env.SECRET_KEY);
+                token = jwt.sign({ email, name }, process.env.SECRET_KEY);
             } catch (error) {
                 console.error('Error generating JWT token:', error);
-                res.status(500).json({"message": "Internal Server Error"});
+                res.status(500).json({ "message": "Internal Server Error" });
                 return;
             }
 
@@ -28,52 +44,67 @@ const createUser = async (req, res) => {
             password = await bcrypt.hash(password, salt);
             const oldUser = await userModel.findOne({ email });
             if (oldUser) {
-                res.json({"message":"This email already exists"});
+                res.json({ "message": "This email already exists" });
             }
             else {
                 const user = await userModel.create({ name, email, password });
-                res.status(201).json({"message":"You are signed up successfully","token":token});
+                res.status(201).json({ "message": "You are signed up successfully", "token": token });
             }
         }
         catch (err) {
-            res.json({err})
+            res.json({ err })
         }
 
     }
     catch (err) {
         console.log('error during creating user', err);
-        res.json({"message":"error during creating user"});
+        res.json({ "message": "error during creating user" });
     }
+}
+
+const findUserPosts=async(req,res)=>{
+   const {email} =req.user;
+   const user=await userModel.findOne({email});
+   const user_id=user._id;
+   const userData=await userModel.findById(user_id).populate([
+    {path:"questions.questions_id"},
+    {path:"answers.answers_id",
+    populate:{path:"question_id.questions"}
+    
+}
+   ]);
+   res.status(200).json(userData);
+
 }
 
 const findUser = async (req, res) => {
     try {
-        if(!req.body.password){
-            req.body.password=process.env.RANDOM_PASSWORD;
+        if (!req.body.password) {
+            req.body.password = process.env.RANDOM_PASSWORD;
         }
         const { email, password } = req.body;
         const user = await userModel.findOne({ email });
 
         if (user) {
             const decryptedPassword = await bcrypt.compare(password, user.password)
-            const {name} =user;
+            const { name } = user;
             if (decryptedPassword) {
 
                 let token;
                 try {
-                    token = jwt.sign({ email,name }, process.env.SECRET_KEY);
+                    token = jwt.sign({ email, name }, process.env.SECRET_KEY);
                 } catch (error) {
                     console.error('Error generating JWT token:', error);
-                    res.status(500).json({"message": "Internal Server Error"});
+                    res.status(500).json({ "message": "Internal Server Error" });
                     return;
                 }
 
-                res.status(201).json({"message":"successfully signed in","token":token});
+                res.status(201).json({ "message": "successfully signed in", "token": token });
             } else {
-                res.status(401).json({"message":"The password is incorrect"});
+                res.status(401).json({ "message": "The password is incorrect" });
             }
         } else {
-            res.status(404).json({"message":"No such user exists"});
+            res.status(404).json({ "message": "No such user exists" });
         }
     } catch (error) {
         console.log(error);
@@ -81,4 +112,4 @@ const findUser = async (req, res) => {
     }
 }
 
-module.exports = { createUser, findUser };
+module.exports = { createUser, findUser,findUserPosts,jwtVerify};

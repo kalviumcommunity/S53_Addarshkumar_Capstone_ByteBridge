@@ -2,7 +2,8 @@ const answerModel = require("../model/answerschema")
 const dataModel=require("../model/questionschema")
 require("dotenv").config();
 const {startSession}=require("mongoose")
-const jwt=require("jsonwebtoken")
+const jwt=require("jsonwebtoken");
+const userModel = require("../model/userschema");
 
 const jwtVerify = (req, res, next) => {
     try {
@@ -14,7 +15,7 @@ const jwtVerify = (req, res, next) => {
         let decoded = jwt.verify(token, process.env.SECRET_KEY);  
         req.user = decoded;
         next();
-    } catch (err) {
+    } catch (err) { 
         res.status(403).json({ message: "You should sign in first" })
     }
 };
@@ -30,18 +31,44 @@ const getQuestion=async(req,res)=>{
     }
 }
 
-  
-  const postQuestion = async (req, res) => {
-    try {
-      const { name } = req.user;
-      const questionData = { ...req.body, username: name };
-      const question = await dataModel.create(questionData);
-      res.status(201).json({ message: "question posted successfully" });
-    } catch (err) {
-      console.error("Error during posting questions:", err);
-      res.status(500).json({ message: "You should sign in first" });
-    }
-  };
+const postQuestion = async (req, res) => {
+  try {
+    const { name, email } = req.user;
+    const questionData = { ...req.body, username: name };
+    const question = await dataModel.create(questionData);
+    const user = await userModel.findOne({ email });
+    const user_id = user._id;
+    await userModel.findByIdAndUpdate(
+      user_id,
+      {
+        $push: {
+          "questions.questions_id": question._id
+        }
+      }
+    )
+    res.status(201).json({ message: "question posted successfully" });
+  } catch (err) {
+    console.error("Error during posting questions:", err);
+    res.status(500).json({ message: "You should sign in first" });
+  }
+};
+
+const deleteQuestion=async(req,res)=>{
+   try{
+    const {id} =req.params;
+    const question=await dataModel.findById(id);
+    const answerToDelete=question.answer_id.answers
+    answerToDelete.forEach(async(e)=>{
+       await answerModel.findByIdAndDelete(e)
+    })
+
+    await dataModel.findByIdAndDelete(id);
+   }
+   catch(err){
+    res.send(err);
+   }
+}
+
 
 
 
@@ -65,15 +92,33 @@ const getQuestion=async(req,res)=>{
   }
   
 
-
   const postAnswer = async (req, res) => {
     const session = await startSession();
     session.startTransaction();
     try {
       const { id } = req.params;     
-      const {name} =req.user;
-      const answerData={...req.body,username:name}
+      const {name,email} =req.user;
+      const answerData={...req.body,username:name}  
       const newAnswer = await answerModel.create(answerData);
+      const user=await userModel.findOne({email});
+      const user_id=user._id;
+      await userModel.findByIdAndUpdate(
+        user_id,{
+          $push:{
+            "answers.answers_id":newAnswer._id
+          }
+        }
+      )
+
+      await answerModel.findByIdAndUpdate(
+        newAnswer._id,
+        {
+          $push:{
+            "question_id.questions":id
+          }
+        }
+      )
+
       await dataModel.findByIdAndUpdate(
         id,
         { $push: { "answer_id.answers": newAnswer._id } },
@@ -89,6 +134,32 @@ const getQuestion=async(req,res)=>{
       res.status(500).send("Error during posting answers");  
     }
   };
+
+  const editAnswer=async(req,res)=>{
+    try{
+      const {id}=req.params;
+      const {answer}=req.body;
+      const data=await answerModel.findByIdAndUpdate(id,
+        {answer}
+      )
+      res.send(data)
+      
+    }
+    catch(err){
+      res.send(err);
+    }
+  }
+
+  const deleteAnswer=async(req,res)=>{
+    try{
+      const {id} = req.params;
+      await answerModel.findByIdAndDelete(id);
+
+    }
+    catch(err){
+      res.send(err);
+    }
+  }
   
 
-module.exports={getQuestion,getAnswers,postQuestion,postAnswer,jwtVerify}
+module.exports={getQuestion,getAnswers,postQuestion,postAnswer,deleteQuestion,editAnswer,deleteAnswer,jwtVerify}

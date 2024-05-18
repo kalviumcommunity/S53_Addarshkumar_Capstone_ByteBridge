@@ -44,7 +44,7 @@ const Questionpage = () => {
         questionImage: imageUrl[0],
       };
 
-      const res = await axios.post("https://s53-addarshkumar-capstone-bytebridge.onrender.com/question", data, {
+      const res = await axios.post("http://localhost:4000/question", data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -1,10 +1,6 @@
 const mongoose=require('mongoose');
 
 const answerSchema=new mongoose.Schema({
-    question_id:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "questions"
-    },
     answer:{
         type:String,
         required:true
@@ -13,6 +9,14 @@ const answerSchema=new mongoose.Schema({
     username:{
         type:String,
         required:true
+    },
+    question_id:{
+        questions:[
+            {
+                type:mongoose.Schema.Types.ObjectId,
+                ref:"questions"
+            }
+        ]
     }
 });
 
