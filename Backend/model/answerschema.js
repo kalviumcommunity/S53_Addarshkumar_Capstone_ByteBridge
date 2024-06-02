@@ -10,6 +10,12 @@ const answerSchema=new mongoose.Schema({
         type:String,
         required:true
     },
+    like:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"users"
+        }
+    ],
     question_id:{
         questions:[
             {

@@ -23,23 +23,49 @@ import {
   AlertDialogFooter,
 } from "@chakra-ui/react";
 
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverFooter,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverAnchor,
+} from "@chakra-ui/react";
+
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 
 import "./Profilepage.css";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
+import { AppContext } from "./context/Parentcontext";
+import { useRecoilValue } from "recoil";
+import { userState } from "../atom";
+
+import { imageDb, auth } from "./firebaseauth/config";
+import { ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
+import { v4 as uuidv4 } from "uuid";
 
 const Profilepage = () => {
-  const [question, setQuestion] = useState([]);
-  const [answer, setAnswer] = useState([]);
+  const {question} = useContext(AppContext);
+  const {answer} = useContext(AppContext);
+  const {userProfile} =useContext(AppContext);
   const [editStates, setEditStates] = useState({});
   const [currentSelectedId, setCurrentSelectedId] = useState(null);
   const [isQuestion, setIsQuestion] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { photoURL } = useContext(AppContext);
+  const isAuthenticated = useRecoilValue(userState);
+  const [image, setImage] = useState(null);
+  const [imagePath, setImagePath] = useState("");
+  const { imageUrl, setImageUrl } = useContext(AppContext);
+
   const textAreaRefs = useRef({});
 
   let token = "";
@@ -54,27 +80,51 @@ const Profilepage = () => {
     console.error("Token cookie not found");
   }
 
-  const handleDelete = async (id) => {
+
+  const handleUpload = async (e) => {
+    const selectedImage = e.target.files[0];
+    setImage(selectedImage);
     try {
-      await axios.delete(isQuestion ? `https://s53-addarshkumar-capstone-bytebridge.onrender.com/question/${id}` : `https://s53-addarshkumar-capstone-bytebridge.onrender.com/answer/${id}`);
-      window.location.reload();
+      const imageRef = ref(imageDb, `profilePictures/${uuidv4()}`);
+      await uploadBytes(imageRef, selectedImage);
+      const newImageUrl = await getDownloadURL(imageRef);
+      setImageUrl([newImageUrl]);
+
+      const addProfile = await axios.put(
+        "http://localhost:4000/updateUser",
+        { profileImg: newImageUrl },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log(addProfile);
     } catch (err) {
       console.log(err);
     }
   };
 
   useEffect(() => {
-    const getUserPosts = async () => {
-      const res = await axios.get("https://s53-addarshkumar-capstone-bytebridge.onrender.com/userposts", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setQuestion(res.data.questions.questions_id);
-      setAnswer(res.data.answers.answers_id);
-    };
-    getUserPosts();
-  }, []);
+    localStorage.setItem("profileimg", imagePath);
+  }, [imagePath]);
+
+
+ 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(
+        isQuestion
+          ? `https://s53-addarshkumar-capstone-bytebridge.onrender.com/question/${id}`
+          : `https://s53-addarshkumar-capstone-bytebridge.onrender.com/answer/${id}`
+      );
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
 
   const handleEditClick = (id) => {
     setEditStates((prev) => ({
@@ -93,7 +143,7 @@ const Profilepage = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-          }
+          },
         }
       );
       console.log(res);
@@ -105,7 +155,6 @@ const Profilepage = () => {
       console.log(err);
     }
   };
-
   return (
     <>
       <AlertDialog
@@ -120,7 +169,9 @@ const Profilepage = () => {
           <AlertDialogHeader>Discard Changes?</AlertDialogHeader>
           <AlertDialogCloseButton />
           <AlertDialogBody>
-            {isQuestion ? "Are you sure you want to delete your Question?" : "Are you sure you want to delete your Answer?"}
+            {isQuestion
+              ? "Are you sure you want to delete your Question?"
+              : "Are you sure you want to delete your Answer?"}
           </AlertDialogBody>
           <AlertDialogFooter>
             <Button onClick={onClose}>No</Button>
@@ -137,7 +188,53 @@ const Profilepage = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <Tabs>
+      <HStack p={"20"} h={"30vh"} className="banner">
+        <HStack>
+          <VStack>
+            <Avatar
+              boxSize={"8vw"}
+              src={
+                isAuthenticated && photoURL ? photoURL : userProfile.profileImg
+              }
+            />
+            <Popover>
+              <PopoverTrigger>
+                <div>
+
+                {isAuthenticated && photoURL ? (
+                  ""
+                ) : (
+                  <HStack cursor={"pointer"}>
+                    <Icon as={FaEdit} />
+                    <Text>Edit profile pic</Text>
+                  </HStack>
+                )}
+                </div>
+              </PopoverTrigger>
+              <PopoverContent color="white" bg="black">
+                <PopoverArrow />
+                <PopoverCloseButton />
+                <PopoverHeader>Change Profile</PopoverHeader>
+                <PopoverBody>
+                  <input
+                    onChange={handleUpload}
+                    type="file"
+                  />
+                  <br /> <br />
+                  <Button colorScheme="green" onClick={handleUpload}>
+                    Upload
+                  </Button>
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
+          </VStack>
+
+          <Text fontSize={"25"} fontWeight={"500"}>
+            {userProfile.name}
+          </Text>
+        </HStack>
+      </HStack>
+      <Tabs m={"20px"}>
         <TabList>
           <Tab>Your Questions</Tab>
           <Tab>Your Answers</Tab>
@@ -146,9 +243,9 @@ const Profilepage = () => {
         <TabPanels>
           <TabPanel>
             {question.length > 0 ? (
-              question.map((item) => (
+              question.map((item, index) => (
                 <Card
-                  key={item._id}
+                  key={index}
                   mt={"50px"}
                   w={["80%", "80%", "60%", "60%"]}
                   className="card"
@@ -171,6 +268,7 @@ const Profilepage = () => {
                       <br />
 
                       <div>{item.question}</div>
+                      <img src={item.questionImage?item.questionImage:""} alt="" />
                       <br />
                       <HStack>
                         <Link to={`/answerpage/${item._id}`}>
@@ -181,7 +279,14 @@ const Profilepage = () => {
                             </HStack>
                           </Button>
                         </Link>
-                        <Button colorScheme="red" onClick={() => { setIsQuestion(true); setCurrentSelectedId(item._id); onOpen(); }}>
+                        <Button
+                          colorScheme="red"
+                          onClick={() => {
+                            setIsQuestion(true);
+                            setCurrentSelectedId(item._id);
+                            onOpen();
+                          }}
+                        >
                           <Text>Delete</Text>
                           <Icon boxSize={"5"} as={MdDelete} />
                         </Button>
@@ -224,8 +329,9 @@ const Profilepage = () => {
           </TabPanel>
           <TabPanel>
             {answer.length > 0 ? (
-              answer.map((item) => (
+              answer.map((item, index) => (
                 <Container
+                  key={index}
                   mt={"20px"}
                   ml={"20px"}
                   p={"20px"}
@@ -233,7 +339,6 @@ const Profilepage = () => {
                   border={"1px solid gray"}
                 >
                   <Card
-                    key={item._id}
                     mt={"50px"}
                     w={["80%", "80%", "100%", "100%"]}
                     className="card"
@@ -301,15 +406,6 @@ const Profilepage = () => {
                           ref={(el) => {
                             textAreaRefs.current[item._id] = el;
                           }}
-                          onChange={(e) => {
-                            setAnswer((prev) =>
-                              prev.map((answer) =>
-                                answer._id === item._id
-                                  ? { ...answer, answer: e.target.value }
-                                  : answer
-                              )
-                            );
-                          }}
                         />
                         <br />
                         {editStates[item._id] ? (
@@ -335,7 +431,14 @@ const Profilepage = () => {
                                 <Icon boxSize={"5"} as={FaEdit} />
                               </HStack>
                             </Button>
-                            <Button colorScheme="red" onClick={() => { setIsQuestion(false); setCurrentSelectedId(item._id); onOpen(); }}>
+                            <Button
+                              colorScheme="red"
+                              onClick={() => {
+                                setIsQuestion(false);
+                                setCurrentSelectedId(item._id);
+                                onOpen();
+                              }}
+                            >
                               <Text>Delete</Text>
                               <Icon boxSize={"5"} as={MdDelete} />
                             </Button>

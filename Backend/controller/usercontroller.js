@@ -77,6 +77,21 @@ const findUserPosts=async(req,res)=>{
 
 }
 
+const updateUserPic=async(req,res)=>{
+    try{
+        const {email} =req.user;
+        const {profileImg} =req.body;
+        const user=await userModel.findOne({email});
+        user.profileImg=profileImg;
+        const updated=await user.save();
+        
+        res.json(updated)
+
+    }catch(err){
+        res.json({error:err.message});
+    }
+}
+
 const findUser = async (req, res) => {
     try {
         if (!req.body.password) {
@@ -112,4 +127,4 @@ const findUser = async (req, res) => {
     }
 }
 
-module.exports = { createUser, findUser,findUserPosts,jwtVerify};
+module.exports = { createUser, findUser,findUserPosts,jwtVerify,updateUserPic};

@@ -10,13 +10,13 @@ import {
   Avatar,
   Box,
   SkeletonText,
-  SkeletonCircle
+  SkeletonCircle,
 } from "@chakra-ui/react";
 import Sidebar from "./Sidebar";
 import { AppContext } from "./context/Parentcontext";
 
 const Homepage = () => {
-  const { data } = useContext(AppContext);
+  const { data,dimensions } = useContext(AppContext);
 
   const [selected, setSelected] = useState("all");
 
@@ -24,6 +24,8 @@ const Homepage = () => {
     setSelected(option);
   };
 
+  
+console.log(dimensions);
   return (
     <>
       <HStack
@@ -63,7 +65,9 @@ const Homepage = () => {
       </HStack>
 
       <HStack m={"5%"} alignItems="flex-start" justifyContent={"space-between"}>
-        <Sidebar />
+        {
+          dimensions.width>480?
+          <Sidebar />:""}
         <VStack w={["80%", "80%", "80%", "80%"]}>
           <HStack w={["80%", "80%", "100%", "100%"]} cursor={"pointer"}>
             <VStack
@@ -132,7 +136,7 @@ const Homepage = () => {
             w={["80%", "80%", "100%", "100%"]}
             h={["50vh", "50vh", "70vh", "70vh"]}
           >
-            {data.length>0 ? (
+            {data.length > 0 ? (
               data.map((item) => (
                 <HStack
                   w={["80%", "80%", "100%", "100%"]}
@@ -166,11 +170,15 @@ const Homepage = () => {
                         <br />
 
                         <div>
-                          {item.question ? (
-                            <Text size="md">{item.question}</Text>
-                          ) : (
-                            <Image src={item.questionImage} />
-                          )}
+                          <Text size="md">{item.question}</Text>
+                          <img
+                            src={
+                              item.questionImage
+                                ? item.questionImage
+                                : ""
+                            }
+                            alt=""
+                          />
                         </div>
                         <br />
                         <HStack>
@@ -190,6 +198,7 @@ const Homepage = () => {
                 </HStack>
               ))
             ) : (
+              <>
               <Box padding="6" boxShadow="lg" bg="white" w="100%">
                 <SkeletonCircle size="10" />
                 <SkeletonText
@@ -199,6 +208,25 @@ const Homepage = () => {
                   skeletonHeight="2"
                 />
               </Box>
+              <Box padding="6" boxShadow="lg" bg="white" w="100%">
+                <SkeletonCircle size="10" />
+                <SkeletonText
+                  mt="4"
+                  noOfLines={4}
+                  spacing="4"
+                  skeletonHeight="2"
+                />
+              </Box>
+              <Box padding="6" boxShadow="lg" bg="white" w="100%">
+                <SkeletonCircle size="10" />
+                <SkeletonText
+                  mt="4"
+                  noOfLines={4}
+                  spacing="4"
+                  skeletonHeight="2"
+                />
+              </Box>
+              </>
             )}
           </VStack>
         </VStack>

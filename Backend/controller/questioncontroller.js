@@ -54,6 +54,8 @@ const postQuestion = async (req, res) => {
 };
 
 const deleteQuestion=async(req,res)=>{
+  const session=await startSession();
+  session.startTransaction();
    try{
     const {id} =req.params;
     const question=await dataModel.findById(id);
@@ -61,11 +63,16 @@ const deleteQuestion=async(req,res)=>{
     answerToDelete.forEach(async(e)=>{
        await answerModel.findByIdAndDelete(e)
     })
-
+    
     await dataModel.findByIdAndDelete(id);
+    await session.commitTransaction();
+    session.endSession();
    }
    catch(err){
-    res.send(err);
+    await session.abortTransaction();
+    session.endSession();
+
+    res.json({message:"An error occured during deleting"}); 
    }
 }
 
@@ -157,9 +164,42 @@ const deleteQuestion=async(req,res)=>{
 
     }
     catch(err){
-      res.send(err);
+      res.json({message:"An error occured during deleting"});
+
+    }
+  }
+
+  const postLikes=async(req,res)=>{
+    try{
+      const {ans_id} =req.params;
+      const {user_id}=req.body;
+      const answers=await answerModel.findByIdAndUpdate(ans_id,
+        {$push : {"like":user_id}},
+        {new:true}
+        
+      );
+      res.json(answers);
+     
+    }catch(err){
+      res.json({error:err.message});
+    }
+  }
+
+  const deleteLikes=async(req,res)=>{
+    try{
+      const {ans_id} =req.params;
+      const {user_id}=req.body;
+      const answers=await answerModel.findByIdAndUpdate(ans_id,
+        {$pull : {"like":user_id}},
+        {new:true}
+        
+      );
+      res.json(answers);
+     
+    }catch(err){
+      res.json({error:err.message});
     }
   }
   
 
-module.exports={getQuestion,getAnswers,postQuestion,postAnswer,deleteQuestion,editAnswer,deleteAnswer,jwtVerify}
+module.exports={getQuestion,getAnswers,postQuestion,postAnswer,deleteQuestion,editAnswer,deleteAnswer,postLikes,deleteLikes,jwtVerify}

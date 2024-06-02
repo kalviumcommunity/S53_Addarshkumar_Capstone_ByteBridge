@@ -1,43 +1,31 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import {
-  HStack,
-  Image,
-  Text,
-  Button,
-  Icon,
-  useDisclosure,
-  VStack,
-  Avatar,
-  useBreakpointValue,
-} from "@chakra-ui/react";
-import {
-  Drawer,
-  DrawerBody,
-  DrawerFooter,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-} from "@chakra-ui/react";
-
-import {
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogContent,
-  AlertDialogOverlay,
-} from '@chakra-ui/react'
-
+import { useDisclosure, HStack, Image, Text, Button, Icon, VStack, Avatar, useBreakpointValue, Drawer, DrawerBody, DrawerFooter, DrawerOverlay, DrawerContent, DrawerCloseButton, AlertDialog, AlertDialogBody, AlertDialogFooter, AlertDialogHeader, AlertDialogContent, AlertDialogOverlay } from "@chakra-ui/react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { CiLogout } from "react-icons/ci";
 import { AppContext } from "./context/Parentcontext";
 import { useRecoilState } from "recoil";
 import { userState } from "../atom";
 
+import { BsQuestionSquare } from "react-icons/bs";
+import { BsFillQuestionSquareFill } from "react-icons/bs";
+import { MdLeaderboard } from "react-icons/md";
+import { FaUsers } from "react-icons/fa";
+
 const Navbar = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isDrawerOpen,
+    onOpen: onDrawerOpen,
+    onClose: onDrawerClose
+  } = useDisclosure();
+  
+  const {
+    isOpen: isAlertOpen,
+    onOpen: onAlertOpen,
+    onClose: onAlertClose
+  } = useDisclosure();
   const [isAuthenticated, setIsAuthenticated] = useRecoilState(userState);
+  const { photoURL, isUser, handleLogout,userProfile } = useContext(AppContext);
   
   let token = "";
   const tokenCookie = document.cookie
@@ -46,16 +34,10 @@ const Navbar = () => {
 
   if (tokenCookie) {
     token = tokenCookie.split("=")[1];
-  } else {
-    console.error("Token cookie not found");
-  }
+  }  
 
-  if(token.length > 0){
+  if (token.length > 0) {
     setIsAuthenticated(true);
-  }
-
-  const handleLogout = () => {
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   }
 
   const isMobile = useBreakpointValue({ base: true, md: false });
@@ -69,25 +51,20 @@ const Navbar = () => {
         color="white"
         h="10vh"
       >
-        <Image
-          loading="lazy"
-          boxSize="50px"
-          src="/logo.svg"
-          alt="logo"
-        />
+        <Image loading="lazy" boxSize="50px" src="/logo.svg" alt="logo" />
         <Link to="/">
           <Text>Home</Text>
         </Link>
         <Text>Blog</Text>
         <Text>Contact us</Text>
-        
+
         <Link to="/login">
           <Button display={isAuthenticated ? "none" : "block"} colorScheme="orange">Login</Button>
         </Link>
-        <Button onClick={onOpen} display={isAuthenticated ? "block" : "none"} colorScheme="red">Log out</Button>
-          <Link to={"/profilepage"}>
-        <Avatar boxSize={"40px"} src="https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=" />
-          </Link>  
+        <Button onClick={onAlertOpen} display={isAuthenticated ? "block" : "none"} colorScheme="red">Log out</Button>
+        <Link to={"/profilepage"}>
+          <Avatar boxSize={"40px"} src={photoURL && isAuthenticated ? photoURL :userProfile.profileImg} />
+        </Link>
       </HStack>
 
       {isMobile && (
@@ -98,21 +75,18 @@ const Navbar = () => {
           color="white"
           h="10vh"
         >
-          <Icon onClick={onOpen} boxSize={6} as={AiOutlineMenu} />
-          <Image
-            boxSize="50px"
-            src="/logo.svg"
-            alt="Dan Abramov"
-          />
+          <Icon onClick={onDrawerOpen} boxSize={6} as={AiOutlineMenu} />
+          <Image boxSize="50px" src="/logo.svg" alt="Dan Abramov" />
 
           <Link to="/login">
-            <Button colorScheme="orange">Login</Button>
+          <Button display={isAuthenticated ? "none" : "block"} colorScheme="orange">Login</Button>
           </Link>
+          <Button onClick={onAlertOpen} display={isAuthenticated ? "block" : "none"} colorScheme="red">Log out</Button>
         </HStack>
       )}
 
       {isMobile && (
-        <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
+        <Drawer isOpen={isDrawerOpen} placement="left" onClose={onDrawerClose}>
           <DrawerOverlay />
           <DrawerContent maxW="200px">
             <DrawerCloseButton />
@@ -120,11 +94,32 @@ const Navbar = () => {
             <DrawerBody mt="40px">
               <VStack h="60vh">
                 <Link to="/">
-                  <Text mt="20px" onClick={onClose}>Home</Text>
+                  <Text mt="20px" onClick={onDrawerClose}>Home</Text>
                 </Link>
-                <Text mt="20px" onClick={onClose}>Blog</Text>
-                <Text mt="20px" onClick={onClose}>contact us</Text>
-                <Text mt="20px" onClick={onClose}>About us</Text>
+                <Text mt="20px" onClick={onDrawerClose}>Blog</Text>
+                <Text mt="20px" onClick={onDrawerClose}>contact us</Text>
+                <Text mt="20px" onClick={onDrawerClose}>About us</Text>
+                <HStack className="nav-icon" width={"120%"}>
+          <Icon boxSize={"6"} as={BsQuestionSquare} />
+          <Link to={"/questionpage"}>
+            <Text>Ask questions</Text>
+          </Link>
+        </HStack>
+
+        <HStack className="nav-icon" width={"120%"}>
+          <Icon boxSize={"4"} as={BsFillQuestionSquareFill} />
+          <Text>Questions</Text>
+        </HStack>
+
+        <HStack className="nav-icon" width={"120%"}>
+          <Icon boxSize={"6"} as={MdLeaderboard} />
+          <Text>Leaderboard</Text>
+        </HStack>
+
+        <HStack className="nav-icon" width={"120%"}>
+          <Icon boxSize={"6"} as={FaUsers} />
+          <Text>Users</Text>
+        </HStack>
                 <Icon mt="30px" boxSize={6} as={CiLogout} />
               </VStack>
             </DrawerBody>
@@ -134,10 +129,7 @@ const Navbar = () => {
         </Drawer>
       )}
 
-      <AlertDialog
-        isOpen={isOpen}
-        onClose={onClose}
-      >
+      <AlertDialog isOpen={isAlertOpen} onClose={onAlertClose}>
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
@@ -149,10 +141,10 @@ const Navbar = () => {
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button onClick={onClose}>
+              <Button onClick={onAlertClose}>
                 Cancel
               </Button>
-              <Button colorScheme='red' onClick={()=>{onClose();handleLogout();}} ml={3}>
+              <Button colorScheme='red' onClick={() => { onAlertClose(); handleLogout(); }} ml={3}>
                 Logout
               </Button>
             </AlertDialogFooter>

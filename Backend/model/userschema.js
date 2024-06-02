@@ -15,6 +15,9 @@ const userSchema=new mongoose.Schema({
         required:true,
         minlength: 6 
     },
+    profileImg:{
+      type:String,
+    },
     questions:{
         questions_id:[
             {
