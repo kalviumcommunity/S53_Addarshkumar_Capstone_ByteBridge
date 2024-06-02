@@ -1,14 +1,14 @@
 import { Textarea, Button, VStack, Text, useToast, HStack, Input } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import { imageDb } from "./firebaseauth/config";
-import { ref, uploadBytes } from "firebase/storage";
+import { ref, uploadBytes,getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import axios from "axios";
 import { AppContext } from "./context/Parentcontext";
 import Loginpage from "./Loginpage";
 
 const Questionpage = () => {
-  const { imageUrl} = useContext(AppContext);
+  const { imageUrl,setImageUrl,userProfile} = useContext(AppContext);
   const toast = useToast();
   const [value, setValue] = useState("");
   const [image, setImage] = useState("");
@@ -30,16 +30,15 @@ const Questionpage = () => {
     const imageRef = ref(imageDb, `files/${v4()}`);
     setCurrImage(imageRef._location.path_);
     await uploadBytes(imageRef, image);
-     window.location.reload()
-  };
+    const newImageUrl = await getDownloadURL(imageRef);
+    setImageUrl([newImageUrl]);
 
-  useEffect(()=>{
-     localStorage.setItem("img_id",currImage)
-  },[currImage])
+  };
 
   const postData = async () => {
     try {
       const data = {
+        profileimage:userProfile.profileImg,
         question: value,
         questionImage: imageUrl[0],
       };
@@ -62,7 +61,7 @@ const Questionpage = () => {
     }
   };
 
-  return (
+  return (  
     <>
       {token.length > 0 ? (
         <VStack>
