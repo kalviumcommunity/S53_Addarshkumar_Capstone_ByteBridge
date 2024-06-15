@@ -34,9 +34,10 @@ const getQuestion=async(req,res)=>{
 const postQuestion = async (req, res) => {
   try {
     const { name, email } = req.user;
-    const questionData = { ...req.body, username: name };
-    const question = await dataModel.create(questionData);
     const user = await userModel.findOne({ email });
+    const profileimage=user.profileImg;
+    const questionData = { ...req.body, username: name,profileimage };
+    const question = await dataModel.create(questionData);
     const user_id = user._id;
     await userModel.findByIdAndUpdate(
       user_id,
@@ -105,9 +106,10 @@ const deleteQuestion=async(req,res)=>{
     try {
       const { id } = req.params;     
       const {name,email} =req.user;
-      const answerData={...req.body,username:name}  
-      const newAnswer = await answerModel.create(answerData);
       const user=await userModel.findOne({email});
+      const profileimage=user.profileImg;
+      const answerData={...req.body,username:name,profileimage}  
+      const newAnswer = await answerModel.create(answerData);
       const user_id=user._id;
       await userModel.findByIdAndUpdate(
         user_id,{
@@ -133,7 +135,7 @@ const deleteQuestion=async(req,res)=>{
       );
       await session.commitTransaction();
       session.endSession();
-      res.status(201).json(newAnswer);
+      res.status(201).json({ message: "Answer posted successfully", newAnswer });
     } catch (err) {
       await session.abortTransaction();
       session.endSession();

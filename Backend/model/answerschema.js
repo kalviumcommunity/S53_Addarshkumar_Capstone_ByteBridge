@@ -10,6 +10,9 @@ const answerSchema=new mongoose.Schema({
         type:String,
         required:true
     },
+    profileimage:{
+        type:String,
+    },
     like:[
         {
             type:mongoose.Schema.Types.ObjectId,

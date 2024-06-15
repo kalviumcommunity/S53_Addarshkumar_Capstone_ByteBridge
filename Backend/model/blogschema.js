@@ -5,6 +5,9 @@ const blogSchema=new mongoose.Schema({
         type:String,
         required:true
     },
+    profileimage:{
+        type:String
+    },
     heading:{
         type:String,
         required:true
