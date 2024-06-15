@@ -24,9 +24,7 @@ const Homepage = () => {
     setSelected(option);
   };
 
-  
-console.log(dimensions);
-  return (
+    return (
     <>
       <HStack
         display={["flex", "flex", "flex", "flex"]}
@@ -119,14 +117,6 @@ console.log(dimensions);
                 handleFocus("trending");
               }}
             >
-              <Text>Trending</Text>
-              <div
-                style={{
-                  width: "166px",
-                  height: "4px",
-                  backgroundColor: selected == "trending" ? "orange" : "white",
-                }}
-              ></div>
             </VStack>
           </HStack>
 
@@ -160,7 +150,7 @@ console.log(dimensions);
                             src={
                               item.profileimage
                                 ? item.profileimage
-                                : "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="
+                                : "https://firebasestorage.googleapis.com/v0/b/fir-authentication-cfa82.appspot.com/o/profilePictures%2F5d48a117-b576-418b-906d-248995591154?alt=media&token=00e4d952-e926-4066-a9c5-0c99f67a1926"
                             }
                           />
                           <Text>

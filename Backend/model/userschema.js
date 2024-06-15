@@ -33,7 +33,13 @@ const userSchema=new mongoose.Schema({
                 ref:"answers"
             }
         ]
-    }
+    },
+    blogs:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"blogs"
+        }
+    ]
 
 })
 

@@ -44,8 +44,27 @@ const Loginpage = () => {
           const res = await axios.post("https://s53-addarshkumar-capstone-bytebridge.onrender.com/login", data);
           console.log(res);
           Cookies.set("token", res.data.token);
+          toast({
+            description:`${res.data.message}`,
+            status: "success",
+            position: "top",
+            duration: 4000,
+            isClosable: true,
+            colorScheme: "blue",
+          });
+          setTimeout(()=>{
+
+            navigate("/");
+            window.location.reload();
+          },2000)
         } catch (err) {
-          console.log(err);
+          toast({
+            description:`${err.response.data.message}`,
+            position: "top",
+            duration: 4000,
+            isClosable: true,
+            colorScheme: "red",
+          });
         }
       }
     };
@@ -59,10 +78,6 @@ const Loginpage = () => {
         console.log(data);
         setUserName(data.user.displayName);
         setUserEmail(data.user.email);
-        setTimeout(()=>{
-          navigate("/");
-
-        },3000)
       })
       .catch((error) => {
         console.log(error);
@@ -75,9 +90,6 @@ const Loginpage = () => {
       .then((result) => {
         setUserEmail(result.user.email)
         setUserName(result.user.displayName)
-        setTimeout(()=>{
-          navigate("/")
-        },2000)
       })
       .catch((error) => {
         console.error(error);
@@ -97,7 +109,11 @@ const Loginpage = () => {
         isClosable: true,
         colorScheme: "blue",
       });
-      navigate("/")
+      setTimeout(()=>{
+
+        navigate("/");
+        window.location.reload();
+      },2000)
     }
     catch(err){
       toast({
@@ -138,19 +154,6 @@ const Loginpage = () => {
       >
         <Image src="/github.png" boxSize="28px" />
         <Text>Continue with Github </Text>
-      </HStack>
-
-      <HStack
-        border="1px solid gray"
-        w={["80%", "50%", "30%", "25%"]}
-        borderRadius="25px"
-        h="40px"
-        justifyContent="space-evenly"
-      >
-        <Image src="/phone.png" boxSize="28px" />
-        <Link to={"/phonelogin"}>
-        <Text>Continue with Phone</Text>
-        </Link>
       </HStack>
 
       <Text>Or continue with email</Text>

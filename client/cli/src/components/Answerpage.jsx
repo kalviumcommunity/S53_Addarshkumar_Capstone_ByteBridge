@@ -12,6 +12,7 @@ import {
   SkeletonText,
   Box,
   Icon,
+  useToast,
   Image
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -22,6 +23,7 @@ import Sidebar from "./Sidebar";
 import { AppContext } from "./context/Parentcontext";
 
 const Answerpage = () => {
+  const toast=useToast();
   const [value, setValue] = useState("");
   const [question, setQuestion] = useState([]);
   const [answers, setAnswers] = useState([]);
@@ -55,8 +57,15 @@ const Answerpage = () => {
           },
         }
       );
-
-      setAnswers("");
+      toast({
+        description: `${res.data.message}`,
+        status: "success",
+        position: "top",
+        duration: 4000,
+        isClosable: true,
+        colorScheme: "blue",
+      });
+      setValue("");
     } catch (err) {
       console.log(err);
     }
@@ -65,7 +74,7 @@ const Answerpage = () => {
   const handlePostLikes = async (answerId) => {
     try {
       const res = await axios.put(
-        `http://localhost:4000/postlikes/${answerId}`,
+        `https://s53-addarshkumar-capstone-bytebridge.onrender.com/postlikes/${answerId}`,
         { user_id: userProfile._id }
       );
       setIsLiked((prevLikedAnswers) => ({
@@ -80,7 +89,7 @@ const Answerpage = () => {
   const handleRemoveLikes = async (answerId) => {
     try {
       const res = await axios.put(
-        `http://localhost:4000/removelikes/${answerId}`,
+        `https://s53-addarshkumar-capstone-bytebridge.onrender.com/removelikes/${answerId}`,
         { user_id: userProfile._id }
       );
       setIsLiked((prevLikedAnswers) => ({
@@ -182,7 +191,7 @@ const Answerpage = () => {
                       <HStack>
                         <Avatar
                           name="Dan Abrahmov"
-                          src="https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="
+                          src={item.profileimage?item.profileimage:"https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="}
                         />
                         <Text>
                           {item.username} <br />

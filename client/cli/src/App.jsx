@@ -8,6 +8,9 @@ import Phonesignin from "./components/Phonesignin"
 import Questionpage from "./components/Questionpage"
 import Answerpage from "./components/Answerpage"
 import Profilepage from "./components/Profilepage"
+import Blogpage from "./components/Blogpage"
+import BlogPostpage from "./components/Blogpostpage"
+import Leaderboard from "./components/Leaderboard"
 function App() {
 
 
@@ -22,8 +25,11 @@ function App() {
      <Route path="/questionpage" element={<Questionpage />} />
      <Route path="/answerpage/:id" element={<Answerpage />} />
      <Route path="/profilepage" element={<Profilepage />} />
+     <Route path="/blogpage" element={<Blogpage />} />
+     <Route path="/blogpostpage" element={<BlogPostpage />} />
+     <Route path="/leaderboard" element={<Leaderboard />} />
      </Routes>
-     {/* <Footer /> */}
+     <Footer />
     </>
   )
 }

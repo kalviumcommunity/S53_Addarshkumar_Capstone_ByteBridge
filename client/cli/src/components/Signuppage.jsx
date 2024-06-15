@@ -24,6 +24,7 @@ import { auth, provider } from "./firebaseauth/config";
 const Signuppage = () => {
   const [username, setUserName] = useState(null);
   const [useremail, setUserEmail] = useState(null);
+  const [photoURL, setPhotoUrl] = useState("");
 
   const navigate=useNavigate();
   const toast = useToast()
@@ -31,16 +32,30 @@ const Signuppage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (username && useremail) {
+      if (username && useremail && photoURL) {
         const data = {
           name: username,
           email: useremail,
+          profileImg:photoURL
         };
 
         try {
           const res = await axios.post("https://s53-addarshkumar-capstone-bytebridge.onrender.com/signup", data);
           console.log(res);
           Cookies.set("token", res.data.token);
+          toast({
+            description: `${res.data.message}`,
+            status: 'success',
+            position: 'top',
+            duration: 4000,
+            isClosable: true,
+            colorScheme: 'blue'
+          })
+          setTimeout(()=>{
+
+            navigate("/");
+            window.location.reload();
+          },2000)
         } catch (err) {
           console.log(err);
         }
@@ -56,6 +71,7 @@ const Signuppage = () => {
         console.log(data);
         setUserName(data.user.displayName);
         setUserEmail(data.user.email);
+        setPhotoUrl(data.user.photoURL);
       })
       .catch((error) => {
         console.log(error);
@@ -87,7 +103,8 @@ const Signuppage = () => {
         colorScheme: 'blue'
       })
       setTimeout(()=>{
-        navigate("/")
+        navigate("/");
+        window.location.reload();
       },2000)
     } catch (err) {
       console.log(err);
@@ -159,22 +176,6 @@ const Signuppage = () => {
           boxSize="28px"
         />
         <Text>Continue with Github</Text>
-      </HStack>
-      <HStack
-        border="1px solid gray"
-        w={["80%", "50%", "30%", "25%"]}
-        borderRadius="25px"
-        h="40px"
-        justifyContent="space-evenly"
-      >
-        <Image
-          loading="lazy"
-          src="/phone.png"
-          boxSize="28px"
-        />
-        <Link to={"/phonelogin"}>
-          <Text>Continue with phone</Text>
-        </Link>
       </HStack>
     </VStack>
   );

@@ -2,6 +2,8 @@ const userModel = require("../model/userschema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const answerModel = require("../model/answerschema");
+const e = require("express");
+const { message } = require("../validator/uservalidation");
 require("dotenv").config();
 
 const jwtVerify = (req, res, next) => {
@@ -24,7 +26,7 @@ const createUser = async (req, res) => {
         if (!req.body.password) {
             req.body.password = process.env.RANDOM_PASSWORD;
         }
-        let { name, email, password } = req.body;
+        let { name, email, password,profileImg } = req.body;
         if (!email || !name || !password) {
             res.json({ "message": "please enter all fields" })
         }
@@ -47,12 +49,12 @@ const createUser = async (req, res) => {
                 res.json({ "message": "This email already exists" });
             }
             else {
-                const user = await userModel.create({ name, email, password });
+                const user = await userModel.create({ name, email, password, profileImg });
                 res.status(201).json({ "message": "You are signed up successfully", "token": token });
             }
         }
         catch (err) {
-            res.json({ err })
+            res.json({err:message})
         }
 
     }
@@ -65,16 +67,59 @@ const createUser = async (req, res) => {
 const findUserPosts=async(req,res)=>{
    const {email} =req.user;
    const user=await userModel.findOne({email});
+   if(user){
+
    const user_id=user._id;
    const userData=await userModel.findById(user_id).populate([
-    {path:"questions.questions_id"},
-    {path:"answers.answers_id",
+    {
+        path:"questions.questions_id"
+    },
+    {
+    path:"answers.answers_id",
     populate:{path:"question_id.questions"}
-    
-}
+    },
+    {path:"blogs"}
    ]);
    res.status(200).json(userData);
+   }
 
+}
+
+const findUserLikes=async(req,res)=>{
+    try {
+        const limit = 10;
+        const usersWithTotalLikes = await userModel.aggregate([
+            
+            {
+                $lookup: {
+                    from: 'answers',
+                    localField: 'answers.answers_id',
+                    foreignField: '_id',
+                    as: 'answersDetails'
+                }
+            },
+            
+            { $unwind: '$answersDetails' },
+            
+            {
+                $group: {
+                    _id: '$_id',
+                    username: { $first: '$name' },
+                    totalLikes: { $sum: { $size: '$answersDetails.like' } }
+                }
+            },
+            
+            { $sort: { totalLikes: -1 } },
+            
+            { $limit: limit }
+        ]);
+    
+        res.json(usersWithTotalLikes);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+    
 }
 
 const updateUserPic=async(req,res)=>{
@@ -127,4 +172,4 @@ const findUser = async (req, res) => {
     }
 }
 
-module.exports = { createUser, findUser,findUserPosts,jwtVerify,updateUserPic};
+module.exports = { createUser, findUser,findUserPosts,jwtVerify,updateUserPic,findUserLikes};

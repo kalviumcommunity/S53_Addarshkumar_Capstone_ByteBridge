@@ -7,6 +7,7 @@ import {
   Card,
   Avatar,
   Icon,
+  Image,
   Text,
   Button,
   useDisclosure,
@@ -55,6 +56,7 @@ import { v4 as uuidv4 } from "uuid";
 const Profilepage = () => {
   const {question} = useContext(AppContext);
   const {answer} = useContext(AppContext);
+  const {userBlogs} = useContext(AppContext);
   const {userProfile} =useContext(AppContext);
   const [editStates, setEditStates] = useState({});
   const [currentSelectedId, setCurrentSelectedId] = useState(null);
@@ -80,7 +82,6 @@ const Profilepage = () => {
     console.error("Token cookie not found");
   }
 
-
   const handleUpload = async (e) => {
     const selectedImage = e.target.files[0];
     setImage(selectedImage);
@@ -91,7 +92,7 @@ const Profilepage = () => {
       setImageUrl([newImageUrl]);
 
       const addProfile = await axios.put(
-        "http://localhost:4000/updateUser",
+        "https://s53-addarshkumar-capstone-bytebridge.onrender.com/updateUser",
         { profileImg: newImageUrl },
         {
           headers: {
@@ -238,6 +239,7 @@ const Profilepage = () => {
         <TabList>
           <Tab>Your Questions</Tab>
           <Tab>Your Answers</Tab>
+          <Tab>Your Blogs</Tab>
         </TabList>
 
         <TabPanels>
@@ -259,7 +261,7 @@ const Profilepage = () => {
                       <HStack>
                         <Avatar
                           name="Dan Abrahmov"
-                          src="https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="
+                          src={item.profileimage?item.profileimage:"https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="}
                         />
                         <Text>
                           {item.username} <br />
@@ -352,7 +354,11 @@ const Profilepage = () => {
                         <HStack>
                           <Avatar
                             name="Dan Abrahmov"
-                            src="https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="
+                            src={
+                              item.question_id.questions[0].profileimage
+                                ? item.question_id.questions[0].profileimage
+                                : "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="
+                            }
                           />
                           <Text>
                             {item.question_id.questions[0].username} <br />
@@ -392,7 +398,7 @@ const Profilepage = () => {
                         <HStack>
                           <Avatar
                             name="Dan Abrahmov"
-                            src="https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="
+                            src={userProfile.profileImg?userProfile.profileImg:"https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="}
                           />
                           <Text>
                             {item.username} <br />
@@ -480,6 +486,52 @@ const Profilepage = () => {
                 </Box>
               </>
             )}
+          </TabPanel>
+          <TabPanel>
+          {userBlogs.map((item) => (
+              <Card
+                key={item._id}
+                display={"flex"}
+                justifyContent={"space-between"}
+                width="60%"
+                padding={"10px"}
+                direction={{ base: "column", sm: "row" }}
+                overflow="hidden"
+                variant="outline"
+              >
+                <VStack>
+                  <div>
+                    <HStack>
+                      <Avatar
+                        name="Dan Abrahmov"
+                        src={userProfile.profileImg?userProfile.profileImg:"https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="}
+
+                      />
+                      <Text>
+                        {item.name}
+                      </Text>
+                    </HStack>
+                    <br />
+
+                    <div>
+                      <Text size="md">{item.heading}</Text>
+                    </div>
+                    <br />
+                    <HStack>
+                      <Text>{item.title}</Text>
+                    </HStack>
+                  </div>
+                </VStack>
+                <VStack>
+                  <Image
+                   src={item.image}
+                    objectFit="cover"
+                    maxW={{ base: "100%", sm: "200px" }}
+                    alt="Caffe Latte"
+                  />
+                </VStack>
+              </Card>
+          ))}
           </TabPanel>
         </TabPanels>
       </Tabs>

@@ -12,6 +12,7 @@ const AppProvider = ({ children }) => {
   const [isUser, setIsUser] = useState(false);
   const [question, setQuestion] = useState([]);
   const [answer, setAnswer] = useState([]);
+  const [userBlogs, setUserBlogs] = useState([]);
   const [userProfile, setUserProfile] = useState({});
   const [dimensions, setDimensions] = useState({
     width: window.innerWidth,
@@ -32,7 +33,9 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const res = await axios.get("https://s53-addarshkumar-capstone-bytebridge.onrender.com/question");
+        const res = await axios.get(
+          "https://s53-addarshkumar-capstone-bytebridge.onrender.com/question"
+        );
         setData(res.data.questions);
       } catch (err) {
         console.log(err);
@@ -43,16 +46,14 @@ const AppProvider = ({ children }) => {
 
   useEffect(() => {
     const getUserPosts = async () => {
-      const res = await axios.get(
-        "https://s53-addarshkumar-capstone-bytebridge.onrender.com/userposts",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.get("https://s53-addarshkumar-capstone-bytebridge.onrender.com/userposts", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setQuestion(res.data.questions.questions_id);
       setAnswer(res.data.answers.answers_id);
+      setUserBlogs(res.data.blogs);
       setUserProfile(res.data);
     };
     getUserPosts();
@@ -82,6 +83,7 @@ const AppProvider = ({ children }) => {
         await signOut(auth);
         setPhotoUrl("");
         setIsUser(false);
+        window.location.reload();
       } catch (err) {
         console.log(err);
       }
@@ -101,7 +103,23 @@ const AppProvider = ({ children }) => {
   }
 
   return (
-    <AppContext.Provider value={{ data, setImageUrl, imageUrl, photoURL, setPhotoUrl, isUser, handleLogout, answer, setAnswer, question, userProfile, dimensions }}>
+    <AppContext.Provider
+      value={{
+        data,
+        setImageUrl,
+        imageUrl,
+        photoURL,
+        setPhotoUrl,
+        isUser,
+        handleLogout,
+        answer,
+        setAnswer,
+        question,
+        userProfile,
+        dimensions,
+        userBlogs,
+      }}
+    >
       {children}
     </AppContext.Provider>
   );

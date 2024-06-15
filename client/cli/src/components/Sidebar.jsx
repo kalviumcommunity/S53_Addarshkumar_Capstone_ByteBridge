@@ -23,6 +23,8 @@ import { BsFillQuestionSquareFill } from "react-icons/bs";
 import { MdLeaderboard } from "react-icons/md";
 import { FaUsers } from "react-icons/fa";
 import { IoIosTrendingUp } from "react-icons/io";
+import { BsPencilSquare } from "react-icons/bs";
+
 
 const Sidebar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -34,14 +36,22 @@ const Sidebar = () => {
   return (
     <>
       <VStack
-        h={"55vh"}
+        h={"50vh"}
         justifyContent={"space-between"}
         pl={["5%", "5%", "5%", "5%"]}
       >
+
         <HStack className="nav-icon" width={"120%"}>
           <Icon boxSize={"6"} as={BsQuestionSquare} />
           <Link to={"/questionpage"}>
             <Text>Ask questions</Text>
+          </Link>
+        </HStack>
+
+        <HStack className="nav-icon" width={"120%"}>
+          <Icon boxSize={"6"} as={BsPencilSquare} />
+          <Link to={"/blogpostpage"}>
+            <Text>Post Blogs</Text>
           </Link>
         </HStack>
 
@@ -52,7 +62,9 @@ const Sidebar = () => {
 
         <HStack className="nav-icon" width={"120%"}>
           <Icon boxSize={"6"} as={MdLeaderboard} />
+          <Link to={"/leaderboard"}>
           <Text>Leaderboard</Text>
+          </Link>
         </HStack>
     
          
@@ -63,10 +75,7 @@ const Sidebar = () => {
           </Link>
         </HStack>
 
-        <HStack className="nav-icon" width={"120%"}>
-          <Icon boxSize={"6"} as={IoIosTrendingUp} />
-          <Text>Trending</Text>
-        </HStack>
+        
         <AlertDialog isOpen={isOpen} onClose={onClose}>
           <AlertDialogOverlay>
             <AlertDialogContent>
