@@ -16,7 +16,7 @@ import Sidebar from "./Sidebar";
 import { AppContext } from "./context/Parentcontext";
 
 const Homepage = () => {
-  const { data,dimensions } = useContext(AppContext);
+  const { data, dimensions } = useContext(AppContext);
 
   const [selected, setSelected] = useState("all");
 
@@ -24,7 +24,7 @@ const Homepage = () => {
     setSelected(option);
   };
 
-    return (
+  return (
     <>
       <HStack
         display={["flex", "flex", "flex", "flex"]}
@@ -48,6 +48,7 @@ const Homepage = () => {
             <Button
               colorScheme="blue"
               mt="20px"
+              ml={"10px"}
               w={["90%", "none", "none", "none"]}
             >
               Create New Account
@@ -63,79 +64,83 @@ const Homepage = () => {
       </HStack>
 
       <HStack m={"5%"} alignItems="flex-start" justifyContent={"space-between"}>
-        {
-          dimensions.width>480?
-          <Sidebar />:""}
-        <VStack w={["80%", "80%", "80%", "80%"]}>
+        {dimensions.width > 780 ? <Sidebar /> : ""}
+        <VStack w={["100%", "80%", "80%", "80%"]}>
           <HStack w={["80%", "80%", "100%", "100%"]} cursor={"pointer"}>
-            <VStack
-              onClick={() => {
-                handleFocus("all");
-              }}
-            >
-              <Text>All questions</Text>
-              <div
-                style={{
-                  width: "166px",
-                  height: "4px",
-                  backgroundColor: selected == "all" ? "orange" : "white",
-                }}
-              ></div>
-            </VStack>
-            <VStack
-              onClick={() => {
-                handleFocus("recent");
-              }}
-            >
-              <Text>Recent questions</Text>
-              <div
-                style={{
-                  width: "166px",
-                  height: "4px",
-                  backgroundColor: selected == "recent" ? "orange" : "white",
-                }}
-              ></div>
-            </VStack>
+            {dimensions.width > 480 ? (
+              <>
+                <VStack
+                  onClick={() => {
+                    handleFocus("all");
+                  }}
+                >
+                  <Text>All questions</Text>
+                  <div
+                    style={{
+                      width: "166px",
+                      height: "4px",
+                      backgroundColor: selected == "all" ? "orange" : "white",
+                    }}
+                  ></div>
+                </VStack>
+                <VStack
+                  onClick={() => {
+                    handleFocus("recent");
+                  }}
+                >
+                  <Text>Recent questions</Text>
+                  <div
+                    style={{
+                      width: "166px",
+                      height: "4px",
+                      backgroundColor:
+                        selected == "recent" ? "orange" : "white",
+                    }}
+                  ></div>
+                </VStack>
 
-            <VStack
-              onClick={() => {
-                handleFocus("most");
-              }}
-            >
-              <Text>Most answered</Text>
-              <div
-                style={{
-                  width: "166px",
-                  height: "4px",
-                  backgroundColor: selected == "most" ? "orange" : "white",
-                }}
-              ></div>
-            </VStack>
+                <VStack
+                  onClick={() => {
+                    handleFocus("most");
+                  }}
+                >
+                  <Text>Most answered</Text>
+                  <div
+                    style={{
+                      width: "166px",
+                      height: "4px",
+                      backgroundColor: selected == "most" ? "orange" : "white",
+                    }}
+                  ></div>
+                </VStack>
+              </>
+            ) : (
+              ""
+            )}
 
             <VStack
               onClick={() => {
                 handleFocus("trending");
               }}
-            >
-            </VStack>
+            ></VStack>
           </HStack>
 
           <VStack
             overflow={"scroll"}
             overflowX={"hidden"}
-            w={["80%", "80%", "100%", "100%"]}
-            h={["50vh", "50vh", "70vh", "70vh"]}
+            w={["100%", "100%", "100%", "100%"]}
+            h={["70vh", "50vh", "70vh", "70vh"]}
           >
             {data.length > 0 ? (
               data.map((item) => (
                 <HStack
-                  w={["80%", "80%", "100%", "100%"]}
+                  w={["100%", "100%", "100%", "100%"]}
                   key={item._id}
                   className="card-component"
                   padding={"20px"}
                 >
                   <Card
-                    w={["80%", "80%", "100%", "100%"]}
+                    w={["100%", "80%", "100%", "100%"]}
                     className="card"
                     padding={"10px"}
                     direction={{ base: "column", sm: "row" }}
@@ -162,11 +167,7 @@ const Homepage = () => {
                         <div>
                           <Text size="md">{item.question}</Text>
                           <img
-                            src={
-                              item.questionImage
-                                ? item.questionImage
-                                : ""
-                            }
+                            src={item.questionImage ? item.questionImage : ""}
                             alt=""
                           />
                         </div>
@@ -189,33 +190,33 @@ const Homepage = () => {
               ))
             ) : (
               <>
-              <Box padding="6" boxShadow="lg" bg="white" w="100%">
-                <SkeletonCircle size="10" />
-                <SkeletonText
-                  mt="4"
-                  noOfLines={4}
-                  spacing="4"
-                  skeletonHeight="2"
-                />
-              </Box>
-              <Box padding="6" boxShadow="lg" bg="white" w="100%">
-                <SkeletonCircle size="10" />
-                <SkeletonText
-                  mt="4"
-                  noOfLines={4}
-                  spacing="4"
-                  skeletonHeight="2"
-                />
-              </Box>
-              <Box padding="6" boxShadow="lg" bg="white" w="100%">
-                <SkeletonCircle size="10" />
-                <SkeletonText
-                  mt="4"
-                  noOfLines={4}
-                  spacing="4"
-                  skeletonHeight="2"
-                />
-              </Box>
+                <Box padding="6" boxShadow="lg" bg="white" w="100%">
+                  <SkeletonCircle size="10" />
+                  <SkeletonText
+                    mt="4"
+                    noOfLines={4}
+                    spacing="4"
+                    skeletonHeight="2"
+                  />
+                </Box>
+                <Box padding="6" boxShadow="lg" bg="white" w="100%">
+                  <SkeletonCircle size="10" />
+                  <SkeletonText
+                    mt="4"
+                    noOfLines={4}
+                    spacing="4"
+                    skeletonHeight="2"
+                  />
+                </Box>
+                <Box padding="6" boxShadow="lg" bg="white" w="100%">
+                  <SkeletonCircle size="10" />
+                  <SkeletonText
+                    mt="4"
+                    noOfLines={4}
+                    spacing="4"
+                    skeletonHeight="2"
+                  />
+                </Box>
               </>
             )}
           </VStack>
