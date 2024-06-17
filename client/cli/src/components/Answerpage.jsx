@@ -27,7 +27,7 @@ const Answerpage = () => {
   const [value, setValue] = useState("");
   const [question, setQuestion] = useState([]);
   const [answers, setAnswers] = useState([]);
-  const { userProfile } = useContext(AppContext);
+  const { userProfile,dimensions } = useContext(AppContext);
   const [isLiked, setIsLiked] = useState({});
   const { id } = useParams();
 
@@ -126,17 +126,25 @@ const Answerpage = () => {
     <>
       <HStack
         mt={"50px"}
-        ml={"5%"}
-        w={"70%"}
+        ml={["none", "none", "5%", "5%"]}
+        w={["100%", "80%", "70%", "70%"]}
         justifyContent={"space-between"}
         alignItems={"flex-start"}
       >
-        <Sidebar />
-        <VStack>
+        {
+        dimensions.width>480?
+        <Sidebar />:""
+        }
+        
+        <VStack 
+        w={["100%", "80%", "100%", "100%"]}
+        justifyContent={"flex-start"}
+        >
           <Container
             overflowY={"scroll"}
             height={"80vh"}
             border={"1px"}
+            w={["100%", "80%", "100%", "100%"]}
             minW={["xs", "xs", "600px", "800px"]}
             p={"10px"}
           >
@@ -242,7 +250,7 @@ const Answerpage = () => {
             )}
           </Container>
           <HStack justifyContent={"center"}>
-            <HStack mt={"30px"} w={"lg"} p={"10px"}>
+            <HStack mt={"30px"} w={["xm","md","lg","lg"]} p={"10px"}>
               <Textarea
                 onChange={(e) => setValue(e.target.value)}
                 placeholder="You can type your Answer here"

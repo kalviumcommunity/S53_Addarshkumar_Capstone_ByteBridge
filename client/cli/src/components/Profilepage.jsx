@@ -193,7 +193,7 @@ const Profilepage = () => {
         <HStack>
           <VStack>
             <Avatar
-              boxSize={"8vw"}
+              boxSize={["30vw","15vw","12vw","10vw"]}
               src={
                 isAuthenticated && photoURL ? photoURL : userProfile.profileImg
               }
@@ -249,7 +249,7 @@ const Profilepage = () => {
                 <Card
                   key={index}
                   mt={"50px"}
-                  w={["80%", "80%", "60%", "60%"]}
+                  w={["100%", "100%", "60%", "60%"]}
                   className="card"
                   padding={"30px"}
                   direction={{ base: "column", sm: "row" }}
@@ -335,14 +335,14 @@ const Profilepage = () => {
                 <Container
                   key={index}
                   mt={"20px"}
-                  ml={"20px"}
+                  // ml={"20px"}
                   p={"20px"}
-                  maxW={["xs", "xs", "600px", "800px"]}
+                  minW={["280px", "300px", "600px", "800px"]}
                   border={"1px solid gray"}
                 >
                   <Card
                     mt={"50px"}
-                    w={["80%", "80%", "100%", "100%"]}
+                    w={["100%", "100%", "100%", "100%"]}
                     className="card"
                     padding={"30px"}
                     direction={{ base: "column", sm: "row" }}
@@ -386,7 +386,7 @@ const Profilepage = () => {
                   <Card
                     key={item._id}
                     mt={"50px"}
-                    w={["80%", "80%", "100%", "100%"]}
+                    w={["100%", "100%", "100%", "100%"]}
                     className="card"
                     padding={"30px"}
                     direction={{ base: "column", sm: "row" }}
@@ -493,7 +493,7 @@ const Profilepage = () => {
                 key={item._id}
                 display={"flex"}
                 justifyContent={"space-between"}
-                width="60%"
+                width={["100%","100%","100%","100%"]}
                 padding={"10px"}
                 direction={{ base: "column", sm: "row" }}
                 overflow="hidden"
@@ -504,7 +504,7 @@ const Profilepage = () => {
                     <HStack>
                       <Avatar
                         name="Dan Abrahmov"
-                        src={userProfile.profileImg?userProfile.profileImg:"https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="}
+                        src={item.profileimage?item.profileimage:"https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="}
 
                       />
                       <Text>

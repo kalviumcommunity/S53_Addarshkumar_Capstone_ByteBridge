@@ -27,7 +27,7 @@ import { AppContext } from "./context/Parentcontext";
 
 const Blogpage = () => {
   const [data, setData] = useState([]);
-  const {userProfile} = useContext(AppContext)
+  const {userProfile,dimensions} = useContext(AppContext)
 
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const Blogpage = () => {
   }, []);
   return (
     <>
-        <VStack w={"80%"}>
+        <VStack w={["100%","100%","80%","80%"]}>
           <HStack mt={"20px"}>
             <InputGroup style={{ marginLeft: "5vw" }}>
               <InputLeftElement>
@@ -64,7 +64,7 @@ const Blogpage = () => {
           w={"100%"} 
           alignItems={"flex-start"}
           >
-          <Sidebar />
+          {dimensions.width > 780 ? <Sidebar /> : ""}
           <VStack 
           w={"100%"}
           >

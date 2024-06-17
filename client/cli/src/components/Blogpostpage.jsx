@@ -76,6 +76,7 @@ const BlogPostpage = () => {
     </Text>
 
     <Text
+    pl={"5px"}
     >
      
    Share your voice, inspire others! Contribute
@@ -93,7 +94,7 @@ const BlogPostpage = () => {
     >
     <div>
         <Text mb='8px'>Heading </Text>
-        <Input onChange={handleChange} name='heading' minW={"md"} placeholder='Heading' />
+        <Input onChange={handleChange} name='heading' minW={["60vw","sm","md","md"]} placeholder='Heading' />
         <br />
         <Text mb='8px'>Share your blogs</Text>
       <Textarea
@@ -101,11 +102,11 @@ const BlogPostpage = () => {
         onChange={handleChange}
         placeholder='Write your post here'
         size='sm'
-        minW={'md'}
+        minW={["60vw","sm","md","md"]}
       />
       <br />
       <Text mb='8px'>Add image </Text>
-        <Input onChange={handleChange} name='image' minW={"md"} placeholder='Add url of image' />
+        <Input onChange={handleChange} name='image' minW={["60vw","sm","md","md"]} placeholder='Add url of image' />
         <br /> <br />
         <HStack
         justifyContent={"center"}
