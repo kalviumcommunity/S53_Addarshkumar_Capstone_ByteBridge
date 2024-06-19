@@ -61,6 +61,7 @@ const Profilepage = () => {
   const [editStates, setEditStates] = useState({});
   const [currentSelectedId, setCurrentSelectedId] = useState(null);
   const [isQuestion, setIsQuestion] = useState(null);
+  const [isBlog, setIsBlog] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { photoURL } = useContext(AppContext);
   const isAuthenticated = useRecoilValue(userState);
@@ -118,6 +119,7 @@ const Profilepage = () => {
       await axios.delete(
         isQuestion
           ? `https://s53-addarshkumar-capstone-bytebridge.onrender.com/question/${id}`
+          :isBlog?`https://s53-addarshkumar-capstone-bytebridge.onrender.com/blog/${id}`
           : `https://s53-addarshkumar-capstone-bytebridge.onrender.com/answer/${id}`
       );
       window.location.reload();
@@ -147,7 +149,28 @@ const Profilepage = () => {
           },
         }
       );
-      console.log(res);
+      setEditStates((prev) => ({
+        ...prev,
+        [id]: false,
+      }));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleBlogUpdate = async (id) => {
+    try {
+      const editedBlog = textAreaRefs.current[id].value;
+
+      const res = await axios.put(
+        `https://s53-addarshkumar-capstone-bytebridge.onrender.com/blog/${id}`,
+        { title: editedBlog },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(res)
       setEditStates((prev) => ({
         ...prev,
         [id]: false,
@@ -172,7 +195,8 @@ const Profilepage = () => {
           <AlertDialogBody>
             {isQuestion
               ? "Are you sure you want to delete your Question?"
-              : "Are you sure you want to delete your Answer?"}
+              : "Are you sure you want to delete your Answer?"
+              }
           </AlertDialogBody>
           <AlertDialogFooter>
             <Button onClick={onClose}>No</Button>
@@ -335,7 +359,7 @@ const Profilepage = () => {
                 <Container
                   key={index}
                   mt={"20px"}
-                  // ml={"20px"}
+                  ml={["none","none","none","20px"]}
                   p={"20px"}
                   minW={["280px", "300px", "600px", "800px"]}
                   border={"1px solid gray"}
@@ -490,10 +514,11 @@ const Profilepage = () => {
           <TabPanel>
           {userBlogs.map((item) => (
               <Card
+                mt={"20px"}
                 key={item._id}
                 display={"flex"}
                 justifyContent={"space-between"}
-                width={["100%","100%","100%","100%"]}
+                width={["100%","100%","60%","60%"]}
                 padding={"10px"}
                 direction={{ base: "column", sm: "row" }}
                 overflow="hidden"
@@ -517,9 +542,52 @@ const Profilepage = () => {
                       <Text size="md">{item.heading}</Text>
                     </div>
                     <br />
-                    <HStack>
-                      <Text>{item.title}</Text>
-                    </HStack>
+                    <VStack>
+                    <Textarea
+                          readOnly={!editStates[item._id]}
+                          defaultValue={item.title}
+                          ref={(el) => {
+                            textAreaRefs.current[item._id] = el;
+                          }}
+                        />
+                        <br />
+                        {editStates[item._id] ? (
+                          <HStack mt={"20px"}>
+                            <Button
+                              colorScheme="green"
+                              onClick={() => handleBlogUpdate(item._id)}
+                            >
+                              <Text>Save</Text>
+                            </Button>
+                            <Button
+                              onClick={() => handleEditClick(item._id)}
+                              colorScheme="red"
+                            >
+                              <Text>Cancel</Text>
+                            </Button>
+                          </HStack>
+                        ) : (
+                          <HStack mt={"20px"}>
+                            <Button onClick={() => handleEditClick(item._id)}>
+                              <HStack>
+                                <Text>Edit</Text>
+                                <Icon boxSize={"5"} as={FaEdit} />
+                              </HStack>
+                            </Button>
+                            <Button
+                              colorScheme="red"
+                              onClick={() => {
+                                setIsBlog(true);
+                                setCurrentSelectedId(item._id);
+                                onOpen();
+                              }}
+                            >
+                              <Text>Delete</Text>
+                              <Icon boxSize={"5"} as={MdDelete} />
+                            </Button>
+                          </HStack>
+                        )}
+                    </VStack>
                   </div>
                 </VStack>
                 <VStack>

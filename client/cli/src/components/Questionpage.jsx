@@ -1,4 +1,4 @@
-import { Textarea, Button, VStack, Text, useToast, HStack, Input } from "@chakra-ui/react";
+import { Textarea, Button, VStack, Text, useToast, HStack, Input,Spinner } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import { imageDb } from "./firebaseauth/config";
 import { ref, uploadBytes,getDownloadURL } from "firebase/storage";
@@ -14,7 +14,7 @@ const Questionpage = () => {
   const navigate=useNavigate();
   const [value, setValue] = useState("");
   const [image, setImage] = useState("");
-  const [currImage,setCurrImage]=useState("");
+  const [isLoading,setIsLoading]=useState(false);
 
   let token = "";
 
@@ -28,13 +28,19 @@ const Questionpage = () => {
     console.error("Token cookie not found");
   }
 
-  const handleUpload = async () => {
-    const imageRef = ref(imageDb, `files/${v4()}`);
-    setCurrImage(imageRef._location.path_);
-    await uploadBytes(imageRef, image);
-    const newImageUrl = await getDownloadURL(imageRef);
-    setImageUrl([newImageUrl]);
 
+  const handleUpload = async () => {
+    setIsLoading(true);
+    try {
+      const imageRef = ref(imageDb, `files/${v4()}`);
+      await uploadBytes(imageRef, image);
+      const newImageUrl = await getDownloadURL(imageRef);
+      setImageUrl([newImageUrl]);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const postData = async () => {
@@ -80,7 +86,7 @@ const Questionpage = () => {
           />
           <HStack>
             <Input type="file" onChange={(e) => setImage(e.target.files[0])} />
-            <Button onClick={handleUpload} colorScheme="orange">
+            <Button isLoading={isLoading} onClick={handleUpload} colorScheme="orange">
               Upload
             </Button>
           </HStack>
