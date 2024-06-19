@@ -51,4 +51,25 @@ const postBlogs=async(req,res)=>{
    }
 }
 
-module.exports={getBlogs,postBlogs,jwtVerify};
+const updateBlog=async(req,res)=>{
+   try{
+      const {id} =req.params;
+      const {title}=req.body;
+      const updatedData=await blogModel.findByIdAndUpdate(id,{title})
+      res.send(updatedData);
+   }catch(err){
+      res.json(err);
+   }
+}
+
+const deleteBlog=async(req,res)=>{
+   try{
+      const {id} =req.params;
+      await blogModel.findByIdAndDelete(id);
+
+   }catch(err){
+      res.json(err)
+   }
+}
+
+module.exports={getBlogs,postBlogs,jwtVerify,deleteBlog,updateBlog};

@@ -148,13 +148,13 @@ const deleteQuestion=async(req,res)=>{
     try{
       const {id}=req.params;
       const {answer}=req.body;
-      const data=await answerModel.findByIdAndUpdate(id,
+      const updatedData=await answerModel.findByIdAndUpdate(id,
         {answer}
       )
-      res.send(data)
+      res.send(updatedData)
       
     }
-    catch(err){
+    catch(err){ 
       res.send(err);
     }
   }
