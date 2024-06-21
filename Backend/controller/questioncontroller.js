@@ -22,7 +22,25 @@ const jwtVerify = (req, res, next) => {
 
 const getQuestion=async(req,res)=>{
     try{
-        const questions=await dataModel.find({})
+        let questions;
+        const {filteredData} =req.query;
+        if(filteredData=="recent"){
+          questions=await dataModel.find({}).sort({createdAt:-1});
+
+        }
+        else if (filteredData === "most") {
+          questions = await dataModel.aggregate([
+            {
+              $addFields: {
+                answerCount: { $size: { $ifNull: ["$answer_id.answers", []] } },
+              },
+            },
+            { $sort: { answerCount: -1 } },
+          ]);
+        } 
+        else {
+          questions = await dataModel.find({});
+        }
         res.status(200).json({questions});
     }
     catch(err){

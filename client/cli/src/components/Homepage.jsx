@@ -16,14 +16,11 @@ import Sidebar from "./Sidebar";
 import { AppContext } from "./context/Parentcontext";
 
 const Homepage = () => {
-  const { data, dimensions } = useContext(AppContext);
-
-  const [selected, setSelected] = useState("all");
+  const { data, dimensions,selected,setSelected } = useContext(AppContext);
 
   const handleFocus = (option) => {
     setSelected(option);
   };
-
   return (
     <>
       <HStack

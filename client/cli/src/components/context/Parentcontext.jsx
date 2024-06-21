@@ -14,6 +14,7 @@ const AppProvider = ({ children }) => {
   const [answer, setAnswer] = useState([]);
   const [userBlogs, setUserBlogs] = useState([]);
   const [userProfile, setUserProfile] = useState({});
+  const [selected, setSelected] = useState("all");
   const [dimensions, setDimensions] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -29,12 +30,11 @@ const AppProvider = ({ children }) => {
       }
     });
   }, []);
-
   useEffect(() => {
     const getData = async () => {
       try {
         const res = await axios.get(
-          "https://s53-addarshkumar-capstone-bytebridge.onrender.com/question"
+          `http://localhost:4000/question?filteredData=${selected}`
         );
         setData(res.data.questions);
       } catch (err) {
@@ -42,7 +42,7 @@ const AppProvider = ({ children }) => {
       }
     };
     getData();
-  }, []);
+  }, [selected]);
 
   useEffect(() => {
     const getUserPosts = async () => {
@@ -118,6 +118,8 @@ const AppProvider = ({ children }) => {
         userProfile,
         dimensions,
         userBlogs,
+        selected,
+        setSelected
       }}
     >
       {children}

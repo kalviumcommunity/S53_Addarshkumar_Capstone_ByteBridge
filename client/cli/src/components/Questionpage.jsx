@@ -1,20 +1,30 @@
-import { Textarea, Button, VStack, Text, useToast, HStack, Input,Spinner } from "@chakra-ui/react";
+import {
+  Textarea,
+  Button,
+  VStack,
+  Text,
+  useToast,
+  HStack,
+  Input,
+  Spinner,
+} from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import { imageDb } from "./firebaseauth/config";
-import { ref, uploadBytes,getDownloadURL } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import axios from "axios";
 import { AppContext } from "./context/Parentcontext";
 import Loginpage from "./Loginpage";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Sidebar from "./Sidebar";
 
 const Questionpage = () => {
-  const { imageUrl,setImageUrl,userProfile} = useContext(AppContext);
+  const { imageUrl, setImageUrl, userProfile,dimensions } = useContext(AppContext);
   const toast = useToast();
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const [value, setValue] = useState("");
   const [image, setImage] = useState("");
-  const [isLoading,setIsLoading]=useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   let token = "";
 
@@ -27,7 +37,6 @@ const Questionpage = () => {
   } else {
     console.error("Token cookie not found");
   }
-
 
   const handleUpload = async () => {
     setIsLoading(true);
@@ -50,7 +59,7 @@ const Questionpage = () => {
         questionImage: imageUrl[0],
       };
 
-      const res = await axios.post("https://s53-addarshkumar-capstone-bytebridge.onrender.com/question", data, {
+      const res = await axios.post("http://localhost:4000/question", data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -63,38 +72,52 @@ const Questionpage = () => {
         isClosable: true,
         colorScheme: "blue",
       });
-      setTimeout(()=>{
-         navigate("/");
-         window.location.reload();
-      },1000)
+      setTimeout(() => {
+        navigate("/");
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       console.error("Error while posting question:", error);
     }
   };
 
-  return (  
+  return (
     <>
       {token.length > 0 ? (
-        <VStack>
-          <Text fontSize={"25px"} fontWeight={"600"}>
-            You can post your questions from here
-          </Text>
+        <HStack
+          m={["none","none","30px","30px"]}
+          w={"90%"}
+          alignItems={"flex-start"}
+        >
+          {dimensions.width > 780 ? <Sidebar /> : ""}
 
-          <Textarea
-            onChange={(e) => setValue(e.target.value)}
-            maxW={["80%", "80%", "60%", "50%"]}
-          />
-          <HStack>
-            <Input type="file" onChange={(e) => setImage(e.target.files[0])} />
-            <Button isLoading={isLoading} onClick={handleUpload} colorScheme="orange">
-              Upload
+          <VStack w={"70%"}>
+            <Text fontSize={"25px"} fontWeight={"600"}>
+              You can post your questions from here
+            </Text>
+
+            <Textarea
+              onChange={(e) => setValue(e.target.value)}
+              maxW={["80%", "80%", "60%", "60%"]}
+            />
+            <HStack>
+              <Input
+                type="file"
+                onChange={(e) => setImage(e.target.files[0])}
+              />
+              <Button
+                isLoading={isLoading}
+                onClick={handleUpload}
+                colorScheme="orange"
+              >
+                Upload
+              </Button>
+            </HStack>
+            <Button onClick={postData} colorScheme="blue">
+              Post
             </Button>
-          </HStack>
-          <Button onClick={postData} colorScheme="blue">
-            Post
-          </Button>
-         
-        </VStack>
+          </VStack>
+        </HStack>
       ) : (
         <Loginpage />
       )}
