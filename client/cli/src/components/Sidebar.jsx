@@ -57,7 +57,9 @@ const Sidebar = () => {
 
         <HStack className="nav-icon" width={"120%"}>
           <Icon boxSize={"4"} as={BsFillQuestionSquareFill} />
-          <Text>Questions</Text>
+          <Link to={"/"}>
+            <Text>Questions</Text>
+          </Link>
         </HStack>
 
         <HStack className="nav-icon" width={"120%"}>

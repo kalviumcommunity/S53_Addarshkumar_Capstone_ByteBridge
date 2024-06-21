@@ -24,7 +24,8 @@ const dataSchema=new mongoose.Schema({
         type:String
     }
 
-});
+},{timestamps:true}
+);
 
 const dataModel=mongoose.model("questions",dataSchema);
 module.exports=dataModel;
