@@ -13,7 +13,9 @@ import {
   Box,
   Icon,
   useToast,
-  Image
+  Image,
+  Grid,
+  GridItem
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -23,12 +25,13 @@ import Sidebar from "./Sidebar";
 import { AppContext } from "./context/Parentcontext";
 
 const Answerpage = () => {
-  const toast=useToast();
+  const toast = useToast();
   const [value, setValue] = useState("");
   const [question, setQuestion] = useState([]);
   const [answers, setAnswers] = useState([]);
-  const { userProfile,dimensions } = useContext(AppContext);
+  const { userProfile, dimensions, adsData } = useContext(AppContext);
   const [isLiked, setIsLiked] = useState({});
+  const [currentAdIndex, setCurrentAdIndex] = useState(0);
   const { id } = useParams();
 
   let token = "";
@@ -122,146 +125,164 @@ const Answerpage = () => {
     getAnswers();
   }, [userProfile, isLiked]);
 
+  useEffect(() => {
+    if (adsData && adsData.length > 0 && adsData[0].imageUrls.length > 0) {
+      const interval = setInterval(() => {
+        setCurrentAdIndex((prevIndex) =>
+          prevIndex === adsData[0].imageUrls.length - 1 ? 0 : prevIndex + 1
+        );
+      }, 5000);
+
+      return () => clearInterval(interval);
+    }
+  }, [adsData]);
+
   return (
     <>
-      <HStack
+      <Grid
+        templateColumns={['repeat(1, 1fr)', 'repeat(1, 1fr)', 'repeat(1,1fr)', '70% 30%']}
         mt={"50px"}
-        ml={["none", "none", "5%", "5%"]}
-        w={["100%", "80%", "70%", "70%"]}
-        justifyContent={"space-between"}
-        alignItems={"flex-start"}
+        ml={["none", "none", "3%", "3%"]}
       >
-        {
-        dimensions.width>480?
-        <Sidebar />:""
-        }
-        
-        <VStack 
-        w={["100%", "80%", "100%", "100%"]}
-        justifyContent={"flex-start"}
-        >
-          <Container
-            overflowY={"scroll"}
-            height={"80vh"}
-            border={"1px"}
+        <HStack alignItems={"flex-start"}>
+          {dimensions.width > 480 ? <Sidebar /> : ""}
+
+          <VStack
             w={["100%", "80%", "100%", "100%"]}
-            minW={["xs", "xs", "600px", "800px"]}
-            p={"10px"}
+            justifyContent={"flex-start"}
           >
-            <Card
-              w={["80%", "80%", "100%", "100%"]}
-              className="card"
-              padding={"10px"}
-              direction={{ base: "column", sm: "row" }}
-              overflow="hidden"
-              variant="outline"
+            <Container
+              overflowY={"scroll"}
+              height={"80vh"}
+              border={"1px"}
+              minW={["xs", "xs", "600px", "700px"]}
+              p={"10px"}
             >
-              <VStack>
-                <div>
-                  <HStack>
-                    <Avatar
-                      name="Dan Abrahmov"
-                      src={
-                        question.profileimage
-                          ? question.profileimage
-                          : "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="
-                      }
-                    />
-                    <Text>
-                      {question.username} <br />
-                    </Text>
-                  </HStack>
-                  <br />
-
-                  <div>{question.question}</div>
-                  <img
-                    src={question.questionImage ? question.questionImage : ""}
-                    alt=""
-                  />
-                  <br />
-                </div>
-              </VStack>
-            </Card>
-            {answers.length > 0 ? (
-              answers.map((item) => (
-                <Card
-                  key={item._id}
-                  mt={"50px"}
-                  w={["80%", "80%", "100%", "100%"]}
-                  className="card"
-                  padding={"10px"}
-                  direction={{ base: "column", sm: "row" }}
-                  overflow="hidden"
-                  variant="outline"
-                >
-                  <VStack w={"100%"} alignItems={"flex-start"}>
-                    <div style={{ width: "100%" }}>
-                      <HStack>
-                        <Avatar
-                          name="Dan Abrahmov"
-                          src={item.profileimage?item.profileimage:"https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="}
-                        />
-                        <Text>
-                          {item.username} <br />
-                        </Text>
-                      </HStack>
-                      <br />
-
-                      <div>{item.answer}</div>
-                      <br />
-                      <HStack w={"15%"} justifyContent={"space-evenly"}>
-                        {
-                          isLiked[item._id]?(
-                            <HStack>
-                            <Image
-                            boxSize={6}
-                            src="/like.png"
-                            onClick={()=>{handleRemoveLikes(item._id)}}
-                            />
-                            <span>{item.like?item.like.length:""}</span>
-                            </ HStack>
-                          ):(
-                            <HStack>
-                            <Image
-                            src="/dislike.png"
-                            boxSize={6}
-                            onClick={()=>{handlePostLikes(item._id)}}
-                            />
-                            <span>{item.like?item.like.length:""}</span>
-                             </HStack>
-                          )
+              <Card
+                w={["80%", "80%", "100%", "100%"]}
+                className="card"
+                padding={"10px"}
+                direction={{ base: "column", sm: "row" }}
+                overflow="hidden"
+                variant="outline"
+              >
+                <VStack>
+                  <div>
+                    <HStack>
+                      <Avatar
+                        name="Dan Abrahmov"
+                        src={
+                          question.profileimage
+                            ? question.profileimage
+                            : "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="
                         }
-                        <Icon boxSize={"5"} as={FaCommentDots} />
-                      </HStack>
-                    </div>
-                  </VStack>
-                </Card>
-              ))
-            ) : (
-              <Box padding="6" boxShadow="lg" bg="white" w="100%">
-                <SkeletonCircle size="10" />
-                <SkeletonText
-                  mt="4"
-                  noOfLines={4}
-                  spacing="4"
-                  skeletonHeight="2"
-                />
-              </Box>
-            )}
-          </Container>
-          <HStack justifyContent={"center"}>
-            <HStack mt={"30px"} w={["xm","md","lg","lg"]} p={"10px"}>
-              <Textarea
-                onChange={(e) => setValue(e.target.value)}
-                placeholder="You can type your Answer here"
-              ></Textarea>
+                      />
+                      <Text>
+                        {question.username} <br />
+                      </Text>
+                    </HStack>
+                    <br />
+
+                    <div>{question.question}</div>
+                    <img
+                      src={question.questionImage ? question.questionImage : ""}
+                      alt=""
+                    />
+                    <br />
+                  </div>
+                </VStack>
+              </Card>
+              {answers.length > 0 ? (
+                answers.map((item) => (
+                  <Card
+                    key={item._id}
+                    mt={"50px"}
+                    w={["80%", "80%", "100%", "100%"]}
+                    className="card"
+                    padding={"10px"}
+                    direction={{ base: "column", sm: "row" }}
+                    overflow="hidden"
+                    variant="outline"
+                  >
+                    <VStack w={"100%"} alignItems={"flex-start"}>
+                      <div style={{ width: "100%" }}>
+                        <HStack>
+                          <Avatar
+                            name="Dan Abrahmov"
+                            src={item.profileimage ? item.profileimage : "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="}
+                          />
+                          <Text>
+                            {item.username} <br />
+                          </Text>
+                        </HStack>
+                        <br />
+
+                        <div>{item.answer}</div>
+                        <br />
+                        <HStack w={"15%"} justifyContent={"space-evenly"}>
+                          {
+                            isLiked[item._id] ? (
+                              <HStack>
+                                <Image
+                                  boxSize={6}
+                                  src="/like.png"
+                                  onClick={() => { handleRemoveLikes(item._id) }}
+                                />
+                                <span>{item.like ? item.like.length : ""}</span>
+                              </HStack>
+                            ) : (
+                              <HStack>
+                                <Image
+                                  src="/dislike.png"
+                                  boxSize={6}
+                                  onClick={() => { handlePostLikes(item._id) }}
+                                />
+                                <span>{item.like ? item.like.length : ""}</span>
+                              </HStack>
+                            )
+                          }
+                          <Icon boxSize={"5"} as={FaCommentDots} />
+                        </HStack>
+                      </div>
+                    </VStack>
+                  </Card>
+                ))
+              ) : (
+                <Box padding="6" boxShadow="lg" bg="white" w="100%">
+                  <SkeletonCircle size="10" />
+                  <SkeletonText
+                    mt="4"
+                    noOfLines={4}
+                    spacing="4"
+                    skeletonHeight="2"
+                  />
+                </Box>
+              )}
+            </Container>
+            <HStack justifyContent={"center"}>
+              <HStack mt={"30px"} w={["xm", "md", "lg", "lg"]} p={"10px"}>
+                <Textarea
+                  onChange={(e) => setValue(e.target.value)}
+                  placeholder="You can type your Answer here"
+                ></Textarea>
+              </HStack>
+              <Button onClick={handlePost} backgroundColor={"orange"}>
+                post
+              </Button>
             </HStack>
-            <Button onClick={handlePost} backgroundColor={"orange"}>
-              post
-            </Button>
-          </HStack>
-        </VStack>
-      </HStack>
+          </VStack>
+        </HStack>
+        <HStack pl={"5%"}>
+          {adsData.map((ads, index) => (
+            <VStack  textAlign={"center"} key={index}>
+              <Text>{ads.description}</Text>
+              <Grid templateColumns='repeat(1,1fr)'>
+                <Image h={"100%"} w={"100%"} src={ads.imageUrls[currentAdIndex]} />
+              </Grid>
+            </VStack>
+          ))}
+        </HStack>
+      </Grid>
     </>
   );
 };

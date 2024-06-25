@@ -11,6 +11,7 @@ import Profilepage from "./components/Profilepage"
 import Blogpage from "./components/Blogpage"
 import BlogPostpage from "./components/Blogpostpage"
 import Leaderboard from "./components/Leaderboard"
+import Adsformpage from "./components/Adsformpage"
 function App() {
 
 
@@ -28,6 +29,7 @@ function App() {
      <Route path="/blogpage" element={<Blogpage />} />
      <Route path="/blogpostpage" element={<BlogPostpage />} />
      <Route path="/leaderboard" element={<Leaderboard />} />
+     <Route path="/adformpage" element={<Adsformpage />} />
      </Routes>
      <Footer />
     </>

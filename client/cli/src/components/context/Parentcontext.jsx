@@ -10,6 +10,8 @@ const AppProvider = ({ children }) => {
   const [imageUrl, setImageUrl] = useState([]);
   const [photoURL, setPhotoUrl] = useState("");
   const [isUser, setIsUser] = useState(false);
+  const [adsData,setAdData]=useState([]);
+  const [adImages,setAdImages]=useState([]);
   const [question, setQuestion] = useState([]);
   const [answer, setAnswer] = useState([]);
   const [userBlogs, setUserBlogs] = useState([]);
@@ -19,6 +21,7 @@ const AppProvider = ({ children }) => {
     width: window.innerWidth,
     height: window.innerHeight,
   });
+
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -34,7 +37,7 @@ const AppProvider = ({ children }) => {
     const getData = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:4000/question?filteredData=${selected}`
+          `https://s53-addarshkumar-capstone-bytebridge.onrender.com/question?filteredData=${selected}`
         );
         setData(res.data.questions);
       } catch (err) {
@@ -43,6 +46,15 @@ const AppProvider = ({ children }) => {
     };
     getData();
   }, [selected]);
+
+  useEffect(() => {
+    const getAds = async () => {
+        const res = await axios.get("https://s53-addarshkumar-capstone-bytebridge.onrender.com/ad-data");
+        setAdData(res.data);
+    };
+
+    getAds();
+  }, []);
 
   useEffect(() => {
     const getUserPosts = async () => {
@@ -119,7 +131,9 @@ const AppProvider = ({ children }) => {
         dimensions,
         userBlogs,
         selected,
-        setSelected
+        setSelected,
+        adsData,
+        adImages
       }}
     >
       {children}
