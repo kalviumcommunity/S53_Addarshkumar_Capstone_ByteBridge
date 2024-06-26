@@ -15,7 +15,7 @@ import {
   useToast,
   Image,
   Grid,
-  GridItem
+  Collapse,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -32,6 +32,7 @@ const Answerpage = () => {
   const { userProfile, dimensions, adsData } = useContext(AppContext);
   const [isLiked, setIsLiked] = useState({});
   const [currentAdIndex, setCurrentAdIndex] = useState(0);
+  const [selectedComment,setSelectedComment]=useState(null);
   const { id } = useParams();
 
   let token = "";
@@ -108,7 +109,7 @@ const Answerpage = () => {
     const getAnswers = async () => {
       try {
         const res = await axios.get(
-          `https://s53-addarshkumar-capstone-bytebridge.onrender.com/answer/${id}`
+          `http://localhost:4000/answer/${id}`
         );
         setQuestion(res.data.question);
         setAnswers(res.data.answerArray);
@@ -137,10 +138,19 @@ const Answerpage = () => {
     }
   }, [adsData]);
 
+  const openComment=(id)=>{
+    setSelectedComment(selectedComment === id ? null : id);
+  }
+
   return (
     <>
       <Grid
-        templateColumns={['repeat(1, 1fr)', 'repeat(1, 1fr)', 'repeat(1,1fr)', '70% 30%']}
+        templateColumns={[
+          "repeat(1, 1fr)",
+          "repeat(1, 1fr)",
+          "repeat(1,1fr)",
+          "70% 30%",
+        ]}
         mt={"50px"}
         ml={["none", "none", "3%", "3%"]}
       >
@@ -209,7 +219,11 @@ const Answerpage = () => {
                         <HStack>
                           <Avatar
                             name="Dan Abrahmov"
-                            src={item.profileimage ? item.profileimage : "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="}
+                            src={
+                              item.profileimage
+                                ? item.profileimage
+                                : "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="
+                            }
                           />
                           <Text>
                             {item.username} <br />
@@ -220,29 +234,55 @@ const Answerpage = () => {
                         <div>{item.answer}</div>
                         <br />
                         <HStack w={"15%"} justifyContent={"space-evenly"}>
-                          {
-                            isLiked[item._id] ? (
-                              <HStack>
-                                <Image
-                                  boxSize={6}
-                                  src="/like.png"
-                                  onClick={() => { handleRemoveLikes(item._id) }}
-                                />
-                                <span>{item.like ? item.like.length : ""}</span>
-                              </HStack>
-                            ) : (
-                              <HStack>
-                                <Image
-                                  src="/dislike.png"
-                                  boxSize={6}
-                                  onClick={() => { handlePostLikes(item._id) }}
-                                />
-                                <span>{item.like ? item.like.length : ""}</span>
-                              </HStack>
-                            )
-                          }
-                          <Icon boxSize={"5"} as={FaCommentDots} />
+                          {isLiked[item._id] ? (
+                            <HStack>
+                              <Image
+                                boxSize={6}
+                                src="/like.png"
+                                onClick={() => {
+                                  handleRemoveLikes(item._id);
+                                }}
+                              />
+                              <span>{item.like ? item.like.length : ""}</span>
+                            </HStack>
+                          ) : (
+                            <HStack>
+                              <Image
+                                src="/dislike.png"
+                                boxSize={6}
+                                onClick={() => {
+                                  handlePostLikes(item._id);
+                                }}
+                              />
+                              <span>{item.like ? item.like.length : ""}</span>
+                            </HStack>
+                          )}
+                          <Icon
+                            onClick={()=>{openComment(item._id)}}
+                            boxSize={"5"}
+                            as={FaCommentDots}
+                          />
                         </HStack>
+                          <Collapse in={selectedComment===item._id} animateOpacity>
+                            <Box
+                              p="40px"
+                              color="black"
+                              mt="4"
+                              bg="gray.200"
+                              rounded="md"
+                              shadow="md"
+                            >
+                              
+                              {
+                               item.comments.map((comment)=>(
+                                <>
+                                <Text>{comment.username}</Text>
+                                <Text>{comment.comment}</Text>
+                                </>
+                               ))
+                              }
+                            </Box>
+                          </Collapse>
                       </div>
                     </VStack>
                   </Card>
@@ -274,10 +314,14 @@ const Answerpage = () => {
         </HStack>
         <HStack pl={"5%"}>
           {adsData.map((ads, index) => (
-            <VStack  textAlign={"center"} key={index}>
+            <VStack textAlign={"center"} key={index}>
               <Text>{ads.description}</Text>
-              <Grid templateColumns='repeat(1,1fr)'>
-                <Image h={"100%"} w={"100%"} src={ads.imageUrls[currentAdIndex]} />
+              <Grid templateColumns="repeat(1,1fr)">
+                <Image
+                  h={"100%"}
+                  w={"100%"}
+                  src={ads.imageUrls[currentAdIndex]}
+                />
               </Grid>
             </VStack>
           ))}

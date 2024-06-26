@@ -101,7 +101,15 @@ const deleteQuestion=async(req,res)=>{
   const getAnswers = async (req, res) => {
     try {
       const { id } = req.params;
-      const answer = await dataModel.findById(id).populate("answer_id.answers");
+      const answer = await dataModel.findById(id).populate([
+        {
+          path:"answer_id.answers"
+        },
+        {
+          path:"answer_id.answers",
+          populate:{path:"comments"}
+        }
+      ]);
       const question=await dataModel.findById(id);
       if (!question) {
         return res.status(404).json({ message: "Question not found" });
