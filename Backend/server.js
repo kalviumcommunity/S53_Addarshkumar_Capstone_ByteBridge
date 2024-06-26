@@ -10,6 +10,7 @@ const questionRouter = require("./router/questionrouter");
 const blogRouter = require("./router/blogrouter");
 const userRouter = require("./router/userrouter");
 const adrouter=require("./router/adrouter");
+const commentRouter=require("./router/commentrouter");
 const cors = require("cors");
 
 app.use(express.json());
@@ -61,6 +62,7 @@ app.use("/", questionRouter);
 app.use("/", blogRouter);
 app.use("/", userRouter);
 app.use("/",adrouter);
+app.use("/",commentRouter);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

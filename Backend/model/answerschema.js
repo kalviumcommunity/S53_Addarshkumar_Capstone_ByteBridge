@@ -26,7 +26,13 @@ const answerSchema=new mongoose.Schema({
                 ref:"questions"
             }
         ]
-    }
+    },
+    comments:[
+        {
+             type:mongoose.Schema.Types.ObjectId,
+             ref:"comments"
+        }
+    ]
 });
 
 const answerModel=mongoose.model("answers",answerSchema);
