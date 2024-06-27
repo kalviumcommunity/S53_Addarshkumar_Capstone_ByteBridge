@@ -12,7 +12,6 @@ const Footer = () => {
   return (
     <>
     <Box
-    mt="10vh"
     h="40vh"
     bgSize="cover"
     bgPosition="center" 
