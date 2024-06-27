@@ -105,7 +105,8 @@ const findUserLikes=async(req,res)=>{
                 $group: {
                     _id: '$_id',
                     username: { $first: '$name' },
-                    totalLikes: { $sum: { $size: '$answersDetails.like' } }
+                    totalLikes: { $sum: { $size: '$answersDetails.like' } },
+                    userProfile:{ $first: '$profileImg' },
                 }
             },
             

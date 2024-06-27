@@ -8,6 +8,10 @@ const commentSchema=new mongoose.Schema({
     username:{
         type:String,
         required:true
+    },
+    userProfile:{
+        type:String,
+        required:true
     }
 })
 

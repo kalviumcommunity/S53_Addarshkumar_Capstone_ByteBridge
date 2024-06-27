@@ -16,6 +16,7 @@ import {
   Image,
   Grid,
   Collapse,
+  Input,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -33,6 +34,7 @@ const Answerpage = () => {
   const [isLiked, setIsLiked] = useState({});
   const [currentAdIndex, setCurrentAdIndex] = useState(0);
   const [selectedComment,setSelectedComment]=useState(null);
+  const [commentData,setCommentData]=useState("");
   const { id } = useParams();
 
   let token = "";
@@ -74,6 +76,21 @@ const Answerpage = () => {
       console.log(err);
     }
   };
+
+  const handlePostComment=async(id)=>{
+    try{
+      const res=await axios.post(`http://localhost:4000/comments/${id}`,{comment:commentData},{
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log(res);
+    }
+    catch(err){
+      console.log(err);
+    }
+
+  }
 
   const handlePostLikes = async (answerId) => {
     try {
@@ -276,11 +293,20 @@ const Answerpage = () => {
                               {
                                item.comments.map((comment)=>(
                                 <>
+                                <HStack>
+                                <Avatar boxSize={"8"} src={comment.userProfile} />
                                 <Text>{comment.username}</Text>
+                                </HStack>
                                 <Text>{comment.comment}</Text>
+                                <br />
+
                                 </>
                                ))
                               }
+                              <HStack>
+                              <Input onChange={(e)=>{setCommentData(e.target.value)}} placeholder="Enter Your Comments" border={"1px solid gray"} type="text" />
+                              <Button colorScheme="teal" onClick={()=>{handlePostComment(item._id)}}>Post</Button>
+                              </HStack>
                             </Box>
                           </Collapse>
                       </div>

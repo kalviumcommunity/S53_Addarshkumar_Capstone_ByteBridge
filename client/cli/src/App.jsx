@@ -31,7 +31,6 @@ function App() {
      <Route path="/leaderboard" element={<Leaderboard />} />
      <Route path="/adformpage" element={<Adsformpage />} />
      </Routes>
-     <Footer />
     </>
   )
 }
