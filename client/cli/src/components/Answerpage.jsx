@@ -17,6 +17,7 @@ import {
   Grid,
   Collapse,
   Input,
+  Badge
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -182,7 +183,7 @@ const Answerpage = () => {
               overflowY={"scroll"}
               height={"80vh"}
               border={"1px"}
-              minW={["xs", "xs", "600px", "700px"]}
+              minW={["xs", "xs", "80%", "80%"]}
               p={"10px"}
             >
               <Card
@@ -219,7 +220,7 @@ const Answerpage = () => {
                   </div>
                 </VStack>
               </Card>
-              {answers.length > 0 ? (
+              {
                 answers.map((item) => (
                   <Card
                     key={item._id}
@@ -313,19 +314,10 @@ const Answerpage = () => {
                     </VStack>
                   </Card>
                 ))
-              ) : (
-                <Box padding="6" boxShadow="lg" bg="white" w="100%">
-                  <SkeletonCircle size="10" />
-                  <SkeletonText
-                    mt="4"
-                    noOfLines={4}
-                    spacing="4"
-                    skeletonHeight="2"
-                  />
-                </Box>
-              )}
+              
+              }
             </Container>
-            <HStack justifyContent={"center"}>
+            <HStack w={"80%"} justifyContent={"flex-start"}>
               <HStack mt={"30px"} w={["xm", "md", "lg", "lg"]} p={"10px"}>
                 <Textarea
                   onChange={(e) => setValue(e.target.value)}
@@ -338,17 +330,18 @@ const Answerpage = () => {
             </HStack>
           </VStack>
         </HStack>
-        <HStack pl={"5%"}>
+        <HStack >
           {adsData.map((ads, index) => (
-            <VStack textAlign={"center"} key={index}>
-              <Text>{ads.description}</Text>
-              <Grid templateColumns="repeat(1,1fr)">
+            <VStack h={"100%"} w={"100%"} justifyContent={"center"} key={index}>
+              <HStack>
+              <Badge colorScheme='red'>Ads</Badge>
+              <Text fontSize={"20px"} fontWeight={'500'}>{ads.description}</Text>
+              </HStack>
                 <Image
-                  h={"100%"}
-                  w={"100%"}
+                  h={"40%"}
+                  w={"80%"}
                   src={ads.imageUrls[currentAdIndex]}
                 />
-              </Grid>
             </VStack>
           ))}
         </HStack>
