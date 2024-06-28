@@ -22,7 +22,7 @@ import { BsQuestionSquare } from "react-icons/bs";
 import { BsFillQuestionSquareFill } from "react-icons/bs";
 import { MdLeaderboard } from "react-icons/md";
 import { FaUsers } from "react-icons/fa";
-import { IoIosTrendingUp } from "react-icons/io";
+import { FaBuysellads } from "react-icons/fa6";
 import { BsPencilSquare } from "react-icons/bs";
 
 
@@ -74,6 +74,13 @@ const Sidebar = () => {
           <Icon boxSize={"6"} as={FaUsers} />
           <Link to={"/profilepage"}>
           <Text>Your Profile</Text>
+          </Link>
+        </HStack>
+
+        <HStack className="nav-icon" width={"120%"}>
+          <Icon boxSize={"6"} as={FaBuysellads} />
+          <Link to={"/adformpage"}>
+          <Text>Show Ads</Text>
           </Link>
         </HStack>
 

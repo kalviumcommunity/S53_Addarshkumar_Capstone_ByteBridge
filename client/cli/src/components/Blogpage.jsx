@@ -58,25 +58,32 @@ const Blogpage = () => {
           </HStack>
           <br />
           <HStack>
-            <Heading size={"md"}>Articles</Heading>
+            <Heading mb={"10px"} size={"md"}>Articles</Heading>
           </HStack>
           <HStack
           w={"100%"} 
           alignItems={"flex-start"}
           >
+            <VStack w={"30%"}>
           {dimensions.width > 780 ? <Sidebar /> : ""}
+
+            </VStack>
           <VStack 
-          w={"100%"}
+           overflow={"scroll"}
+           overflowX={"hidden"}
+           w={["100%", "100%", "100%", "100%"]}
+           h={["70vh", "50vh", "80vh", "80vh"]}
+          
           >
           {data.map((item) => (
               <Card
+                mt={"20px"}
                 key={item._id}
                 display={"flex"}
                 justifyContent={"space-between"}
                 width="80%"
                 padding={"10px"}
                 direction={{ base: "column", sm: "row" }}
-                overflow="hidden"
                 variant="outline"
               >
                 <VStack>
@@ -84,7 +91,7 @@ const Blogpage = () => {
                     <HStack>
                       <Avatar
                         name="Dan Abrahmov"
-                        src={userProfile.profileImg?userProfile.profileImg:"https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="}
+                        src={item.profileimage?item.profileimage:"https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="}
 
                       />
                       <Text>

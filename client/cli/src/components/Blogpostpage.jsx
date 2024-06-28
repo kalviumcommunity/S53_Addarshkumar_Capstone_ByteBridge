@@ -2,8 +2,11 @@ import { HStack,VStack,Text,Input,Textarea,Button,useToast } from '@chakra-ui/re
 import React,{useContext, useState} from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { AppContext } from './context/Parentcontext'
+import Sidebar from './Sidebar'
 
 const BlogPostpage = () => {
+  const {dimensions} =useContext(AppContext);
   const toast = useToast();
   const navigate=useNavigate();
 
@@ -62,6 +65,13 @@ const BlogPostpage = () => {
     }
   return (
     <>
+    <HStack alignItems={"flex-start"}>
+      <VStack w={"20%"} h={"100vh"} pt={"6%"}>
+    {dimensions.width > 780 ? <Sidebar /> : ""}
+
+      </VStack>
+
+
     <VStack
     height={'100vh'}
     backgroundImage={"./postpage.svg"}
@@ -122,6 +132,8 @@ const BlogPostpage = () => {
     </VStack>
 
     </VStack>
+    
+    </HStack>
     </>
   )
 }
