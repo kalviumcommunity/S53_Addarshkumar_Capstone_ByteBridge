@@ -17,6 +17,7 @@ const AppProvider = ({ children }) => {
   const [userBlogs, setUserBlogs] = useState([]);
   const [userProfile, setUserProfile] = useState({});
   const [selected, setSelected] = useState("all");
+  const [ads,setAds] =useState([]);
   const [dimensions, setDimensions] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -67,6 +68,7 @@ const AppProvider = ({ children }) => {
       setAnswer(res.data.answers.answers_id);
       setUserBlogs(res.data.blogs);
       setUserProfile(res.data);
+      setAds(res.data.ads);
     };
     getUserPosts();
   }, []);
@@ -133,7 +135,8 @@ const AppProvider = ({ children }) => {
         selected,
         setSelected,
         adsData,
-        adImages
+        adImages,
+        ads
       }}
     >
       {children}
