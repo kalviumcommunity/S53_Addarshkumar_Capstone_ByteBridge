@@ -53,6 +53,7 @@ import Sidebar from "./Sidebar";
 import { imageDb, auth } from "./firebaseauth/config";
 import { ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
+import Loginpage from "./Loginpage";
 
 const Profilepage = () => {
   const { question,ads } = useContext(AppContext);
@@ -69,6 +70,7 @@ const Profilepage = () => {
   const [image, setImage] = useState(null);
   const [imagePath, setImagePath] = useState("");
   const { imageUrl, setImageUrl, dimensions } = useContext(AppContext);
+  const [isLoading,setIsLoading]=useState(false);
 
   const textAreaRefs = useRef({});
 
@@ -84,12 +86,11 @@ const Profilepage = () => {
     console.error("Token cookie not found");
   }
 
-  const handleUpload = async (e) => {
-    const selectedImage = e.target.files[0];
-    setImage(selectedImage);
+  const handleUpload = async () => {
+    setIsLoading(true);
     try {
       const imageRef = ref(imageDb, `profilePictures/${uuidv4()}`);
-      await uploadBytes(imageRef, selectedImage);
+      await uploadBytes(imageRef, image);
       const newImageUrl = await getDownloadURL(imageRef);
       setImageUrl([newImageUrl]);
 
@@ -106,6 +107,9 @@ const Profilepage = () => {
       console.log(addProfile);
     } catch (err) {
       console.log(err);
+    }finally{
+      setIsLoading(false);
+      window.location.reload()
     }
   };
 
@@ -179,6 +183,8 @@ const Profilepage = () => {
     }
   };
   return (
+    token.length>0?(
+
     <>
       <AlertDialog
         motionPreset="slideInBottom"
@@ -238,9 +244,9 @@ const Profilepage = () => {
                 <PopoverCloseButton />
                 <PopoverHeader>Change Profile</PopoverHeader>
                 <PopoverBody>
-                  <input onChange={handleUpload} type="file" />
+                  <input onChange={(e)=>{setImage(e.target.files[0])}} type="file" />
                   <br /> <br />
-                  <Button colorScheme="green" onClick={handleUpload}>
+                  <Button isLoading={isLoading} colorScheme="green" onClick={handleUpload}>
                     Upload
                   </Button>
                 </PopoverBody>
@@ -704,6 +710,9 @@ const Profilepage = () => {
         </TabPanels>
       </Tabs>
     </>
+    ):(
+      <Loginpage />
+    )
   );
 };
 

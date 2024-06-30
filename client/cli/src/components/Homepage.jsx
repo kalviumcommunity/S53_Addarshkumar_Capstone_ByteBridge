@@ -176,7 +176,7 @@ const Homepage = () => {
                               Answer
                             </Button>
                           </Link>
-                          <Link to={"/answerpage"}>
+                          <Link to={`/answerpage/${item._id}`}>
                             <Text cursor={"pointer"}>View answer</Text>
                           </Link>
                         </HStack>
