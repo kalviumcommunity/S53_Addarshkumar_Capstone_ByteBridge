@@ -116,13 +116,23 @@ const Loginpage = () => {
       },2000)
     }
     catch(err){
-      toast({
-        description:`${err.response.data.message}`,
-        position: "top",
-        duration: 4000,
-        isClosable: true,
-        colorScheme: "red",
-      });
+      if (err.response && err.response.status === 429) {
+        toast({
+          description: "Too many requests, please try again later.",
+          position: "top",
+          duration: 4000,
+          isClosable: true,
+          colorScheme: "red",
+        });
+      } else {
+        toast({
+          description: `${err.response.data.message}`,
+          position: "top",
+          duration: 4000,
+          isClosable: true,
+          colorScheme: "red",
+        });
+      }
     }
     
   };

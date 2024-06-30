@@ -80,7 +80,7 @@ const Answerpage = () => {
 
   const handlePostComment=async(id)=>{
     try{
-      const res=await axios.post(`http://localhost:4000/comments/${id}`,{comment:commentData},{
+      const res=await axios.post(`https://s53-addarshkumar-capstone-bytebridge.onrender.com/comments/${id}`,{comment:commentData},{
         headers:{
           Authorization: `Bearer ${token}`
         }
@@ -127,7 +127,7 @@ const Answerpage = () => {
     const getAnswers = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:4000/answer/${id}`
+          `https://s53-addarshkumar-capstone-bytebridge.onrender.com/answer/${id}`
         );
         setQuestion(res.data.question);
         setAnswers(res.data.answerArray);

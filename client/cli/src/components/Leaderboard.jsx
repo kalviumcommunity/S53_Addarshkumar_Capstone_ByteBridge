@@ -7,7 +7,7 @@ const Leaderboard = () => {
   const getTopUsers = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:4000/userlikes"
+        "https://s53-addarshkumar-capstone-bytebridge.onrender.com/userlikes"
       );
       setTopUsers(res.data);
       console.log(topUsers);
