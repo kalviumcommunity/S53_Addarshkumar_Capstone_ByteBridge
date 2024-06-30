@@ -55,7 +55,7 @@ import { ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 
 const Profilepage = () => {
-  const { question } = useContext(AppContext);
+  const { question,ads } = useContext(AppContext);
   const { answer } = useContext(AppContext);
   const { userBlogs } = useContext(AppContext);
   const { userProfile } = useContext(AppContext);
@@ -641,6 +641,61 @@ const Profilepage = () => {
                         alt="Caffe Latte"
                       />
                     </VStack>
+                  </Card>
+                ))}
+              </VStack>
+            </HStack>
+          </TabPanel>
+
+          <TabPanel>
+            <HStack>
+              <VStack position={"absolute"} top={"15%"} pl={"5%"}>
+                {dimensions.width > 780 ? <Sidebar /> : ""}
+              </VStack>
+              <VStack
+                overflow={"scroll"}
+                overflowX={"hidden"}
+                w={["100%", "100%", "100%", "100%"]}
+                h={["70vh", "50vh", "70vh", "70vh"]}
+              >
+                {ads.map((item) => (
+                  <Card
+                    mt={"20px"}
+                    key={item._id}
+                    display={"flex"}
+                    justifyContent={"space-between"}
+                    width={["100%", "100%", "60%", "60%"]}
+                    padding={"10px"}
+                    direction={{ base: "column", sm: "row" }}
+                    variant="outline"
+                  >
+                    <VStack>
+                      <div>
+                        <HStack>
+                          
+                          <Text>{item.category}</Text>
+                        </HStack>
+                        <br />
+
+                        <div>
+                          <Text size="md">{item.description}</Text>
+                        </div>
+                        <br />
+                        <HStack>
+                          
+                          {
+                          item.imageUrls.map((e)=>(
+                            <Image src={e} />
+                          ))
+                          }
+                         
+                        </HStack>
+                        <Text>Duration :</Text>
+                        <Text>{item.startDate}</Text>
+                        <Text>{item.endDate}</Text>
+                      </div>
+                    </VStack>
+                    
                   </Card>
                 ))}
               </VStack>

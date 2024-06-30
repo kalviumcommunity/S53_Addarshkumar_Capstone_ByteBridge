@@ -78,7 +78,8 @@ const findUserPosts=async(req,res)=>{
     path:"answers.answers_id",
     populate:{path:"question_id.questions"}
     },
-    {path:"blogs"}
+    {path:"blogs"},
+    {path:"ads"}
    ]);
    res.status(200).json(userData);
    }
