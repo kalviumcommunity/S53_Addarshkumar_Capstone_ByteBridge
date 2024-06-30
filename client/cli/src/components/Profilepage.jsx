@@ -255,9 +255,10 @@ const Profilepage = () => {
       </HStack>
       <Tabs m={"20px"}>
         <TabList>
-          <Tab>Your Questions</Tab>
-          <Tab>Your Answers</Tab>
-          <Tab>Your Blogs</Tab>
+          <Tab>My Questions</Tab>
+          <Tab>My Answers</Tab>
+          <Tab>My Blogs</Tab>
+          <Tab>My Ads</Tab>
         </TabList>
 
         <TabPanels>
@@ -333,7 +334,7 @@ const Profilepage = () => {
                   ))
                 ) : (
                   <>
-                    <Box padding="6" boxShadow="lg" bg="white" w="100%">
+                    <Box padding="6" boxShadow="lg" bg="white" w="60%">
                       <SkeletonCircle size="10" />
                       <SkeletonText
                         mt="4"
@@ -342,7 +343,7 @@ const Profilepage = () => {
                         skeletonHeight="2"
                       />
                     </Box>
-                    <Box padding="6" boxShadow="lg" bg="white" w="100%">
+                    <Box padding="6" boxShadow="lg" bg="white" w="60%">
                       <SkeletonCircle size="10" />
                       <SkeletonText
                         mt="4"
@@ -351,7 +352,7 @@ const Profilepage = () => {
                         skeletonHeight="2"
                       />
                     </Box>
-                    <Box padding="6" boxShadow="lg" bg="white" w="100%">
+                    <Box padding="6" boxShadow="lg" bg="white" w="60%">
                       <SkeletonCircle size="10" />
                       <SkeletonText
                         mt="4"
@@ -510,7 +511,7 @@ const Profilepage = () => {
                   ))
                 ) : (
                   <>
-                    <Box padding="6" boxShadow="lg" bg="white" w="100%">
+                    <Box padding="6" boxShadow="lg" bg="white" w="60%">
                       <SkeletonCircle size="10" />
                       <SkeletonText
                         mt="4"
@@ -519,7 +520,7 @@ const Profilepage = () => {
                         skeletonHeight="2"
                       />
                     </Box>
-                    <Box padding="6" boxShadow="lg" bg="white" w="100%">
+                    <Box padding="6" boxShadow="lg" bg="white" w="60%">
                       <SkeletonCircle size="10" />
                       <SkeletonText
                         mt="4"
@@ -528,7 +529,7 @@ const Profilepage = () => {
                         skeletonHeight="2"
                       />
                     </Box>
-                    <Box padding="6" boxShadow="lg" bg="white" w="100%">
+                    <Box padding="6" boxShadow="lg" bg="white" w="60%">
                       <SkeletonCircle size="10" />
                       <SkeletonText
                         mt="4"
@@ -563,7 +564,6 @@ const Profilepage = () => {
                     width={["100%", "100%", "60%", "60%"]}
                     padding={"10px"}
                     direction={{ base: "column", sm: "row" }}
-                    overflow="hidden"
                     variant="outline"
                   >
                     <VStack>
