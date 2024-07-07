@@ -176,6 +176,7 @@ const Homepage = () => {
                               Answer
                             </Button>
                           </Link>
+                          <Text>{item.answer_id.answers.length}</Text>
                           <Link to={`/answerpage/${item._id}`}>
                             <Text cursor={"pointer"}>View answer</Text>
                           </Link>

@@ -41,6 +41,10 @@ const Blogpage = () => {
     };
     getBlogs();
   }, []);
+
+  const trimTitle=(title)=>{
+    return title.slice(0,100).concat("  . . .")
+  }
   return (
     <>
         <VStack w={["100%","100%","80%","80%"]}>
@@ -75,7 +79,16 @@ const Blogpage = () => {
            h={["70vh", "50vh", "80vh", "80vh"]}
           
           >
-          {data.map((item) => (
+          {data.map((item) => {
+          const title=trimTitle(item.title);
+          const blogData={
+            item,
+            title
+          }
+
+            return(
+              <Link to={`/blogpreview/${item._id}`}>
+
               <Card
                 mt={"20px"}
                 key={item._id}
@@ -101,11 +114,11 @@ const Blogpage = () => {
                     <br />
 
                     <div>
-                      <Text size="md">{item.heading}</Text>
+                      <Heading size="md">{item.heading}</Heading>
                     </div>
                     <br />
                     <HStack>
-                      <Text>{item.title}</Text>
+                      <Text>{title}</Text>
                     </HStack>
                   </div>
                 </VStack>
@@ -118,7 +131,9 @@ const Blogpage = () => {
                   />
                 </VStack>
               </Card>
-          ))}
+              </Link>
+            )
+          })}
           </VStack>
           </HStack>
         </VStack>

@@ -30,6 +30,17 @@ const getBlogs=async(req,res)=>{
      }
 }
 
+const blogPreview=async(req,res)=>{
+   try{
+      const {id}=req.params;
+      const blog=await blogModel.findOne({_id:id});
+      res.json(blog);
+   }
+   catch(err){
+      res.status(500).json("error during fetching blog")
+   }
+}  
+
 const postBlogs=async(req,res)=>{
    try{
       const {email,name} =req.user;
@@ -82,4 +93,4 @@ const deleteBlog=async(req,res)=>{
    }
 }
 
-module.exports={getBlogs,postBlogs,jwtVerify,deleteBlog,updateBlog};
+module.exports={getBlogs,postBlogs,jwtVerify,deleteBlog,updateBlog,blogPreview};
