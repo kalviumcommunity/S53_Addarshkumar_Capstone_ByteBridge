@@ -31,7 +31,7 @@ const Blogpreview = () => {
   useEffect(() => {
     const getBlogs = async () => {
       try {
-        const res = await axios.get(`http://localhost:4000/blog/${id}`);
+        const res = await axios.get(`https://s53-addarshkumar-capstone-bytebridge.onrender.com/blog/${id}`);
         setData(res.data);
       } catch (err) {
         console.log(err);
