@@ -1,53 +1,52 @@
-const mongoose=require('mongoose');
+const mongoose = require('mongoose');
 
-const userSchema=new mongoose.Schema({
-    name:{
-        type:String,
-        required:true,
-
+const userSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
     },
-    email:{
-        type:String,
-        required:true
+    email: {
+        type: String,
+        required: true
     },
-    password:{
-        type:String,
-        required:true,
-        minlength: 6 
+    password: {
+        type: String,
+        required: true,
+        minlength: 6
     },
-    profileImg:{
-      type:String,
+    profileImg: {
+        type: String,
     },
-    questions:{
-        questions_id:[
+    questions: {
+        questions_id: [
             {
-                type:mongoose.Schema.Types.ObjectId,
-                ref:"questions"
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "questions"
             }
         ]
     },
-    answers:{
-        answers_id:[
+    answers: {
+        answers_id: [
             {
-                type:mongoose.Schema.Types.ObjectId,
-                ref:"answers"
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "answers"
             }
         ]
     },
-    blogs:[
+    blogs: [
         {
-            type:mongoose.Schema.Types.ObjectId,
-            ref:"blogs"
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "blogs"
         }
     ],
-    ads:[
+    ads: [
         {
-            type:mongoose.Schema.Types.ObjectId,
-            ref:"ads"
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "ads"
         }
-    ]
+    ],
+    verified: { type: Boolean, default: false },
+});
 
-})
-
-const userModel=mongoose.model("users",userSchema);
-module.exports=userModel
+const userModel = mongoose.model("users", userSchema);
+module.exports = userModel;

@@ -13,6 +13,7 @@ import BlogPostpage from "./components/Blogpostpage"
 import Leaderboard from "./components/Leaderboard"
 import Adsformpage from "./components/Adsformpage"
 import Blogpreview from "./components/Blogpreview"
+import Verifyemail from "./components/Verifyemail"
 function App() {
 
 
@@ -32,6 +33,7 @@ function App() {
      <Route path="/leaderboard" element={<Leaderboard />} />
      <Route path="/adformpage" element={<Adsformpage />} />
      <Route path="/blogpreview/:id" element={<Blogpreview />}/>
+     <Route path="/verify/:token" element={<Verifyemail />}/>
      </Routes>
     </>
   )

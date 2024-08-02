@@ -45,7 +45,7 @@ const Signuppage = () => {
 
         try {
           const res = await axios.post(
-            "https://s53-addarshkumar-capstone-bytebridge.onrender.com/signup",
+            "http://localhost:4000/third_part_signup",
             data
           );
           console.log(res);
@@ -100,26 +100,21 @@ const Signuppage = () => {
       data.profileImg =
         "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=";
 
-      const res = await axios.post(
-        "https://s53-addarshkumar-capstone-bytebridge.onrender.com/signup",
-        data
-      );
-      Cookies.set("token", res.data.token);
-      toast({
-        description: `${res.data.message}`,
-        status: "success",
-        position: "top",
-        duration: 4000,
-        isClosable: true,
-        colorScheme: "blue",
-      });
-      setTimeout(() => {
-        navigate("/");
-        window.location.reload();
-      }, 2000);
-    } catch (err) {
-      console.log(err);
-    }
+        const res = await axios.post('http://localhost:4000/signup', data);
+        toast({
+          description: res.data.message,
+          status: "success",
+          duration: 4000,
+          isClosable: true,
+        });
+      } catch (err) {
+        toast({
+          description: err.response.data.message,
+          status: "error",
+          duration: 4000,
+          isClosable: true,
+        });
+      }
   };
 
   return (
