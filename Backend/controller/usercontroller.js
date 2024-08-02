@@ -176,6 +176,9 @@ const updateUserPic = async (req, res) => {
 
 const findUser = async (req, res) => {
     try {
+        if(!req.body.password){
+            req.body.password=process.env.RANDOM_PASSWORD;
+        }
         const { email, password } = req.body;
         const user = await userModel.findOne({ email });
 
