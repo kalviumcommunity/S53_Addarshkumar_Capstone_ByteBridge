@@ -45,7 +45,7 @@ const Signuppage = () => {
 
         try {
           const res = await axios.post(
-            "http://localhost:4000/third_part_signup",
+            "https://s53-addarshkumar-capstone-bytebridge.onrender.com/third_part_signup",
             data
           );
           console.log(res);
@@ -100,7 +100,7 @@ const Signuppage = () => {
       data.profileImg =
         "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=";
 
-        const res = await axios.post('http://localhost:4000/signup', data);
+        const res = await axios.post('https://s53-addarshkumar-capstone-bytebridge.onrender.com/signup', data);
         toast({
           description: res.data.message,
           status: "success",
