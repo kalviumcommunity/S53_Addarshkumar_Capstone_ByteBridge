@@ -12,7 +12,7 @@ const Verifyemail = () => {
   useEffect(() => {
     const verifyUser = async () => {
       try {
-        const res = await axios.post(`http://localhost:4000/verify/${token}`);
+        const res = await axios.post(`https://s53-addarshkumar-capstone-bytebridge.onrender.com/verify/${token}`);
         Cookies.set("token", res.data.token);
         toast({
           description: res.data.message,
